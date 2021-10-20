@@ -1,0 +1,35 @@
+<?php
+$table = "City";
+
+echo $_SERVER['DOCUMENT_ROOT'];die;
+
+$connection = new mysqli($host, $user, $password, $database);
+
+$all = $connection->query("SELECT * FROM $table");
+
+foreach($all as $row)
+{
+echo "<li>".$row['id']."</li>";
+}
+
+//try {
+//    $db = new PDO("mysql:host=localhost;dbname=$database", $user, $password);
+//    echo "<h2>TODO</h2><ol>";
+  //    foreach($db->query("SELECT id FROM $table") as $row) {
+  //        echo "<li>" . $row['id'] . "</li>";
+  //    }
+  //    echo "</ol>";
+//} catch (PDOException $e) {
+//    print "Error!: " . $e->getMessage() . "<br/>";
+//    die();
+//}
+//
+//echo '<html lang="PL">
+//<head>
+  //  <title> HTML rocks! </title>
+  //</head>
+//<body>
+//<p> '."I'm running this website on an Ubuntu server! </p>
+//<p> Some other things </p>
+//</body>
+//</html>";

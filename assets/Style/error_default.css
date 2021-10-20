@@ -1,0 +1,22 @@
+html{
+    background-color: rgb(240, 240, 240);
+}
+div{
+    position: fixed;
+
+}
+header{
+    width: 70%;
+    position: fixed;
+
+    background-color: white;
+    margin: 8% 15% 0 15%;
+    border: 2px solid rgb(200, 200, 200);
+}
+
+h1{
+    margin: 0 0 0 5%;
+
+    font-size: 90px;
+    font-family: Sahadeva, system-ui;
+}
