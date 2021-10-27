@@ -5,11 +5,9 @@
 <html lang="pl-PL">
 
     <head>
-        <title>
-            <?= $_SESSION['error'] ?>
-        </title>
+        <title><?= $_SESSION['error'] ?></title>
         <link rel="stylesheet" href="<?= $GLOBALS['routing']->getRoute('style-error') ?>">
-        <link rel="shortcut icon" href="<?= $GLOBALS['routing']->getRoute('favicon-error') ?>">
+        <link rel="shortcut icon" href="<?= $GLOBALS['routing']->getRoute('image-favicon') ?>">
     </head>
 
     <body>

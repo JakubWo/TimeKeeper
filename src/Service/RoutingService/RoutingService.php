@@ -8,12 +8,11 @@ class RoutingService{
     public function getRoute($path_code) : string
     {
         $path = $this->codeIntoPath($path_code);
-
         if (!empty($path)) {
             return $path;
         }
-        
-        return $this->codeIntoPath('error-404');
+
+        return $this->codeIntoPath('default-/error_404');
     }
 
     private function codeIntoPath($path_code) : ?string

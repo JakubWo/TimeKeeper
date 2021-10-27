@@ -1,6 +1,6 @@
 default:
   /login: "src/Template/login.php"
-  error: "src/Template/Error/Error404.php"
+  /error_404: "src/Template/Error/Error404.php"
 
 config:
   paramters: "config/parameters.php"
