@@ -1,0 +1,9 @@
+#<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^.*$ /index.php
+
+#</IfModule>
+
+# Redirects to 404 on path to url situations.
+Redirect "/.gitignore" "/error_404"

@@ -1,6 +1,6 @@
 <?php
 
-namespace src\Routing;
+namespace src\Service\RoutingService;
 
 class RoutingService{
     private array $routes;
@@ -12,24 +12,18 @@ class RoutingService{
         if (!empty($path)) {
             return $path;
         }
-
-        $_SESSION['error'] = '404 - not found';
+        
         return $this->codeIntoPath('error-404');
     }
 
     private function codeIntoPath($path_code) : ?string
     {
         if(empty($this->routes)) {
-            $this->getAllRoutes();
+            $this->routes = yaml_parse_file("config/routes.yaml");
         }
-        $path_parts = explode('-', $path_code);
 
+        $path_parts = explode('-', $path_code);
         return $this->routes[$path_parts[0]][$path_parts[1]];
     }
 
-    private function getAllRoutes() : void
-    {
-        $raw_routes = file_get_contents("config/routes.json");
-        $this->routes = json_decode($raw_routes, true);
-    }
 }

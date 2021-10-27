@@ -1,13 +1,9 @@
 html{
     background-color: rgb(240, 240, 240);
 }
-div{
-    position: fixed;
 
-}
 header{
     width: 70%;
-    position: fixed;
 
     background-color: white;
     margin: 8% 15% 0 15%;

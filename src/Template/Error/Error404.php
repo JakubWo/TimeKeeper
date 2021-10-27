@@ -1,5 +1,5 @@
 <?php
-    if(empty($_SESSION['error'])) $_SESSION['error'] = "Unexpected error!";
+    if(empty($_SESSION['error'])) $_SESSION['error'] = "Error 404";
 ?>
 <!DOCTYPE html>
 <html lang="pl-PL">
