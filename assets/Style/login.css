@@ -64,7 +64,16 @@ button:hover{
 }
 
 form p{
-    margin: 5% 0 0 5%;
+    margin: 8% 0 0 5%;
+}
+
+#error_email, #error_password {
+    position: fixed;
+    margin: 0 0 0 7.5%;
+
+
+    font-size: 16px;
+    color: #d90000;
 }
 
 a{

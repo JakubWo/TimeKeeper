@@ -1,22 +1,24 @@
 default:
+  /redirect: "src/redirect.php"
   /login: "src/Template/login.php"
-  /error_404: "src/Template/Error/Error404.php"
+  /error: "src/Template/error.php"
+  /login_authorization: "src/Listener/loginAuthorization.php"
 
 config:
-  paramters: "config/parameters.php"
+  parameters: "config/parameters.yaml"
 
 image:
-  favicon: "assets/Image/TimeKeeper.png"
+  favicon: "http://tk.localhost/assets/Image/TimeKeeper.png"
 
 style:
-  error: "assets/Style/error_default.css"
+  error: "http://tk.localhost/assets/Style/error.css"
   login: "assets/Style/login.css"
 
 js:
-  route: ""
+  login: "assets/src/login.js"
 
-template:
-  login: "src/Template/login.php"
+#template:
 
 service:
   auth: "src/Service/AuthService/AuthService.php"
+  db: "src/Service/DatabaseService/DatabaseService.php"

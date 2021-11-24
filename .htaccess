@@ -1,9 +1,21 @@
-#<IfModule mod_rewrite.c>
-    RewriteEngine on
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.php$ - [L]
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^.*$ /index.php
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.php [L]
+</IfModule>
 
-#</IfModule>
+# Blocks .gitignore
+Redirect /.gitignore /error
 
-# Redirects to 404 on path to url situations.
-Redirect "/.gitignore" "/error_404"
+# Blocks file system paths
+RedirectMatch 301 ^/src /error
+RedirectMatch 301 ^/config /error
+RedirectMatch 301 ^/var /error
+
+# Redirects errors on service error page
+ErrorDocument 404 src/Template/error.php
+ErrorDocument 403 src/Template/error.php
+ErrorDocument 500 src/Template/error.php

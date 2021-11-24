@@ -1,13 +1,25 @@
 <?php
-
 session_start();
 
-include("src/Service/RoutingService/RoutingService.php");
-use src\Service\RoutingService\RoutingService;
-$routing = new RoutingService();
+$configuration = yaml_parse_file("config/parameters.yaml");
 
-if($_SERVER['REQUEST_URI'] === '/'){
-    require($routing->getRoute('template-login'));
-} else {
-    require($routing->getRoute('default-'.$_SERVER['REQUEST_URI']));
+$siteMode = $configuration['siteMode'];
+
+include("src/Service/RoutingService/RoutingService.php");
+//include("src/Service/ErrorService/ErrorService.php"); Czy nie powinien być odpalany w każdym miejscu osobno? Lepiej raczej.
+
+
+use src\Service\RoutingService\RoutingService;
+//use src\Service\ErrorService\ErrorService;
+//use src\Service\DatabaseService\DatabaseService;
+
+$routingService = new RoutingService();
+//$errorService = new ErrorService();
+//$dbService = new DatabaseService($configuration['database']);
+
+if($_SERVER['REQUEST_URI'] === '/') {
+    $_SERVER['REQUEST_URI'] .= 'login';
 }
+
+unset($configuration);
+require($routingService->getRoute('default-'.$_SERVER['REQUEST_URI']));

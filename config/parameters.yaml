@@ -1,3 +1,5 @@
+siteMode: DEV
+
 database:
   host: localhost
   username: tk_prod

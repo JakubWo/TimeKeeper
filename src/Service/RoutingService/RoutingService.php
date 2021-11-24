@@ -12,7 +12,8 @@ class RoutingService{
             return $path;
         }
 
-        return $this->codeIntoPath('default-/error_404');
+        // Changes URL for every wrong route request.
+        header("Location: /error");
     }
 
     private function codeIntoPath($path_code) : ?string
