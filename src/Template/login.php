@@ -12,35 +12,39 @@
     </head>
 
     <body>
+
     <div>
-        <form id="login_form" method="post" action="\login_authorization">
+        <form id="login_form" method="post" action="\login_authorization" autocomplete="off">
             <p>Email:</p>
             <label>
-                <input type="email" id="email_input" value="asd@asd.asd" name="email">
+                <input type="email" id="email_input" value="admin@mail.pl" name="email">
             </label>
             <p id="error_email"></p>
 
             <p>Password:</p>
             <label>
-                <input type="password" id="password_input" value="123" name="password">
+                <input type="password" id="password_input" value="admin" name="password">
             </label>
             <p id="error_password"></p>
 
+            <p id="error_login">
+                <?php
+                    echo $_SESSION['login_result'];
+                    unset($_SESSION['login_result']);
+                ?>
+            </p>
+            <label>
+                <button type="button" onclick="checkLoginParams()" id="submit_button">Log in</button>
+            </label>
+
             <p><a href="">Terms of use</a></p>
 
-            <label>
-                <button type="button" onclick="checkLoginParams()">Log in</button>
-
-            </label>
         </form>
     </div>
+
+    <footer>
+
+    </footer>
+
     </body>
 </html>
-
-<?php
-
-//function display()
-//{
-//    echo $_POST['email_input'];
-//}
-//?>

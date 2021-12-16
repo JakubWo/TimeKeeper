@@ -20,5 +20,5 @@ js:
 #template:
 
 service:
-  auth: "src/Service/AuthService/AuthService.php"
-  db: "src/Service/DatabaseService/DatabaseService.php"
+  auth: "src/Service/AuthService.php"
+  db: "src/Service/DatabaseService.php"

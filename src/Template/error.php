@@ -1,6 +1,8 @@
 <?php
-    if(empty($_SESSION['error']['title'])) {
-        $_SESSION['error']['title'] = "Error 404";
+    if ($_SESSION['siteMode'] !== 'PROD') {
+        $_SESSION['error']['title'] = $_SESSION['error']['title'] ?? "Unknown error";
+    } else {
+        $_SESSION['error']['title'] = $_SESSION['error']['title'] ? "Unknown error" : "Error 404";
     }
 ?>
 <!DOCTYPE html>
@@ -13,25 +15,21 @@
     </head>
 
     <body>
-    <nav id="return">
-        Back to main page
-        
-    </nav>
-    
-    <header>
+
+    <a href="/"><button>Back to main page</button></a>
+
+
+    <header class="error_format_box">
         <h1><?= $_SESSION['error']['title'] ?></h1>
     </header>
 
-    <div>
+    <div class="error_format_box">
         <?php
-            if ($GLOBALS['siteMode'] !== 'PROD') {
-                if (isset($_SESSION['error']['details'])) {
-                    echo $_SESSION['error']['details'];
-                } else {
-                    echo "Unknown error!";
-                }
+            if ($_SESSION['siteMode'] !== 'PROD') {
+                echo "<h2>".($_SESSION['error']['message'] ?? "Unknown error!")."</h2>";
+                echo "<p>".($_SESSION['error']['details'] ?? 'Unknown')."</p>";
             } else {
-                echo "Looks like something went wrong, please try again";
+                echo "<h2>Looks like something went wrong, please try again</h2>";
             }
 
         ?>
@@ -42,8 +40,7 @@
 </html>
 
 <?php
-//unset($_SESSION['details']);
-unset($_SESSION['error'])
+    unset($_SESSION['error'])
 ?>
 
 <!-- redirect on refresh? -->

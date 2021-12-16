@@ -1,18 +1,43 @@
-html{
+body {
+    min-width: 700px;
+
     background-color: rgb(240, 240, 240);
+
+    font-family: Sahadeva, system-ui;
+    font-size: 20px;
 }
 
-header{
+.error_format_box {
     width: 70%;
+    min-width: 400px;
+    margin-left: 15%;
+    margin-right: 15%;
 
     background-color: white;
-    margin: 8% 15% 0 15%;
     border: 2px solid rgb(200, 200, 200);
+
 }
 
-h1{
-    margin: 0 0 0 5%;
+button {
+    margin: 1% 0 0 1%;
 
-    font-size: 90px;
     font-family: Sahadeva, system-ui;
+    font-size: 17px;
+}
+
+header {
+    margin-top: 6%;
+}
+
+h1, h2, p {
+    margin: 1% 0 1% 5%;
+}
+
+h1 {
+    font-size: 90px;
+}
+
+
+div {
+    margin-top: 2%;
 }

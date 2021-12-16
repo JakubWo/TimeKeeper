@@ -12,24 +12,22 @@ class DatabaseService{
     public function __construct($dbData){
         try {
             $this->db = new PDO(
-                'mysql:host=' . $dbData['host'] .
+                'myxsql:host=' . $dbData['host'] .
                 ';dbname=' . $dbData['database'] .
                 ';charset=ascii',
                 $dbData['username'],
                 $dbData['password']
             );
         } catch (PDOException $PDOException) {
-            $_SESSION['error']['title'] = "Unknown error";
-            $_SESSION['error']['details'] = $PDOException->getMessage();
-            require($GLOBALS['routingService']->getRoute('default-/error'));
+            $_SESSION['error']['title'] = "Database error";
+            $_SESSION['error']['message'] = $PDOException->getMessage();
+            $i = 0;
+            foreach($PDOException->getTrace() as $array){
+                $_SESSION['error']['details'] .= '('.++$i.') In file: '.$array['file'].'('.$array['line'].'): '
+                    .$array['class'].$array['type'].$array['function'].'<br>';
+            }
+            header("Location: /error");
         }
-    }
-
-    public function query(string $sql, array $params = [])
-    {
-        print_r($sql, $params);die;
-        $statement = $this->db->prepare($sql);
-        return $statement->execute($params);
     }
 
     /**

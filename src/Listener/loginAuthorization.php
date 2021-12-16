@@ -1,24 +1,33 @@
 <?php
 
+// listens to \login_authorization
+
 include($GLOBALS['routingService']->getRoute('service-auth'));
 include($GLOBALS['routingService']->getRoute('service-db'));
 
 use src\Service\AuthService\AuthService;
 use src\Service\DatabaseService\DatabaseService;
 
-authenticateUser($_POST);
+authenticateUser();
 
-function authenticateUser(array $login_params){
-    $authService = new AuthService();
-    $GLOBALS['dbService'] = new DatabaseService(yaml_parse_file($GLOBALS['routingService']->getRoute('config-parameters'))['database']);
+function authenticateUser() : void {
+    $GLOBALS['dbService'] = new DatabaseService(
+        yaml_parse_file($GLOBALS['routingService']->getRoute('config-parameters'))['database']);
 
-    if(!$authService->authenticate($login_params)){
+    AuthService::authenticate();
+
+    if(!$_SESSION['isLoggedIn']){
         unset($GLOBALS['dbService']);
-        $_SESSION['login_result'] = "Couldn't log in";
-        require($GLOBALS['routingService']->getRoute('default-/login'));
-    }
+        unset($_SESSION['isLoggedIn']);
+        $_SESSION['login_result'] = 'Login and/or password is incorrect.';
+        header('Location: /login');
 
-    print_r("END");die;
-//    require($GLOBALS['routingService']->getRoute('default-/error'));
+    } else {
+
+        $_SESSION['error']['title'] = 'Logged in';
+        $_SESSION['error']['message'] = $_SESSION['isLoggedIn'];
+        $_SESSION['error']['details'] = 'User id: '.$_SESSION['user_id'];
+        header('Location: /error');
+    }
 
 }

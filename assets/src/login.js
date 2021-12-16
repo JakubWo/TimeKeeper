@@ -1,3 +1,14 @@
+document.onreadystatechange = () => {
+    if (document.readyState === 'complete') {
+        if (document.getElementById("error_login").innerText !== '') {
+            document.getElementById("submit_button").disabled = true;
+            setTimeout(function () {
+                document.getElementById("submit_button").disabled = false;
+            }, 2000)
+        }
+    }
+}
+
 document.addEventListener("keydown", function(event) {
     if(event.key === "Enter"){
         checkLoginParams();
@@ -11,8 +22,10 @@ function checkLoginParams() {
     const emailInput = document.getElementById("email_input").value;
     const passwordInput = document.getElementById("password_input").value;
 
+    document.getElementById("error_login").innerText = "";
     emailError.innerText = "";
     passwordError.innerText = "";
+
 
     if (passwordInput === "") {
         passwordError.innerText = "You must fill this field";
