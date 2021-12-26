@@ -4,29 +4,33 @@
 
 include($GLOBALS['routingService']->getRoute('service-auth'));
 include($GLOBALS['routingService']->getRoute('service-db'));
+include($GLOBALS['routingService']->getRoute('service-error'));
 
 use src\Service\AuthService\AuthService;
 use src\Service\DatabaseService\DatabaseService;
+use src\Service\ErrorService\ErrorService;
 
 authenticateUser();
 
-function authenticateUser() : void {
-    $GLOBALS['dbService'] = new DatabaseService(
-        yaml_parse_file($GLOBALS['routingService']->getRoute('config-parameters'))['database']);
-
+function authenticateUser(): void
+{
+    $GLOBALS['dbService'] = new DatabaseService();
     AuthService::authenticate();
 
-    if(!$_SESSION['isLoggedIn']){
+    if (!$_SESSION['isLoggedIn']) {
         unset($GLOBALS['dbService']);
         unset($_SESSION['isLoggedIn']);
+
         $_SESSION['login_result'] = 'Login and/or password is incorrect.';
         header('Location: /login');
 
     } else {
-
-        $_SESSION['error']['title'] = 'Logged in';
-        $_SESSION['error']['message'] = $_SESSION['isLoggedIn'];
-        $_SESSION['error']['details'] = 'User id: '.$_SESSION['user_id'];
+        // Just to see login result.
+        ErrorService::manualError(
+            'Logged in',
+            $_SESSION['isLoggedIn'],
+            'User id: ' . $_SESSION['user_id']
+        );
         header('Location: /error');
     }
 

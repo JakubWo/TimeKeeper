@@ -1,47 +1,29 @@
 <?php
-    if ($_SESSION['siteMode'] !== 'PROD') {
-        $_SESSION['error']['title'] = $_SESSION['error']['title'] ?? "Unknown error";
-    } else {
-        $_SESSION['error']['title'] = $_SESSION['error']['title'] ? "Unknown error" : "Error 404";
+    $error = null;
+    if(isset($_COOKIE['error'])) {
+        $error = unserialize($_COOKIE['error']);
     }
 ?>
 <!DOCTYPE html>
 <html lang="pl-PL">
-
     <head>
-        <title><?= $_SESSION['error']['title'] ?></title>
+        <title><?= $error['title'] ?? 'Unknown error' ?></title>
         <link rel="stylesheet" href="<?= $GLOBALS['routingService']->getRoute('style-error') ?>">
         <link rel="shortcut icon" href="<?= $GLOBALS['routingService']->getRoute('image-favicon') ?>">
+        <script src="<?= $GLOBALS['routingService']->getRoute('js-error') ?>"></script>
     </head>
 
     <body>
+        <button onclick="redirect_to_main()">Back to main page</button>
 
-    <a href="/"><button>Back to main page</button></a>
+        <header class="error_format_box">
+            <h1><?= $error['title'] ?? 'Unknown error' ?></h1>
+        </header>
 
-
-    <header class="error_format_box">
-        <h1><?= $_SESSION['error']['title'] ?></h1>
-    </header>
-
-    <div class="error_format_box">
-        <?php
-            if ($_SESSION['siteMode'] !== 'PROD') {
-                echo "<h2>".($_SESSION['error']['message'] ?? "Unknown error!")."</h2>";
-                echo "<p>".($_SESSION['error']['details'] ?? 'Unknown')."</p>";
-            } else {
-                echo "<h2>Looks like something went wrong, please try again</h2>";
-            }
-
-        ?>
-    </div>
-
+        <div class="error_format_box">
+            <h2> <?= $error['message'] ?? 'Empty error stack. :('?> </h2>
+            <p> <?= $error['details'] ?> </p>
+        </div>
     </body>
-
 </html>
-
-<?php
-    unset($_SESSION['error'])
-?>
-
-<!-- redirect on refresh? -->
 

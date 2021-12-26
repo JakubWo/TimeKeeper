@@ -16,9 +16,11 @@ style:
 
 js:
   login: "assets/src/login.js"
+  error: "assets/src/error.js"
 
 #template:
 
 service:
   auth: "src/Service/AuthService.php"
   db: "src/Service/DatabaseService.php"
+  error: "src/Service/ErrorService.php"

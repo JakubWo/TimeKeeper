@@ -4,29 +4,31 @@ namespace src\Service\DatabaseService;
 
 use PDO;
 use PDOException;
+use src\Service\ErrorService\ErrorService;
 
-class DatabaseService{
+class DatabaseService
+{
 
     private PDO $db;
 
-    public function __construct($dbData){
+    public function __construct()
+    {
+        $dbData = yaml_parse_file($GLOBALS['routingService']->getRoute('config-parameters'))['database'];
         try {
             $this->db = new PDO(
-                'myxsql:host=' . $dbData['host'] .
+                'mysql:host=' . $dbData['host'] .
                 ';dbname=' . $dbData['database'] .
                 ';charset=ascii',
                 $dbData['username'],
                 $dbData['password']
             );
         } catch (PDOException $PDOException) {
-            $_SESSION['error']['title'] = "Database error";
-            $_SESSION['error']['message'] = $PDOException->getMessage();
-            $i = 0;
-            foreach($PDOException->getTrace() as $array){
-                $_SESSION['error']['details'] .= '('.++$i.') In file: '.$array['file'].'('.$array['line'].'): '
-                    .$array['class'].$array['type'].$array['function'].'<br>';
-            }
-            header("Location: /error");
+            ErrorService::PDOError(
+                "Database connection error",
+                $PDOException->getMessage(),
+                $PDOException->getTrace()
+            );
+            header("Location: /error",);
         }
     }
 

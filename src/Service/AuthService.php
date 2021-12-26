@@ -2,10 +2,18 @@
 
 namespace src\Service\AuthService;
 
-class AuthService{
+use src\Service\DatabaseService\DatabaseService;
+use src\Service\ErrorService\ErrorService;
 
-    public static function authenticate() : void
+class AuthService
+{
+
+    public static function authenticate(): void
     {
+        if (!isset($GLOBALS['dbService'])) {
+            $GLOBALS['dbService'] = new DatabaseService();
+        }
+
         $db = $GLOBALS['dbService']->getDb();
 
         try {
@@ -13,8 +21,14 @@ class AuthService{
             $st->execute([$_POST['email'], $_POST['password']]);
             $user_id = $st->fetchColumn();
         } catch (\PDOException $PDOException) {
-            //pass
+            ErrorService::PDOError(
+                'Database login authorization exception.',
+                $PDOException->getMessage(),
+                $PDOException->getTrace()
+            );
+            header('Location: /error',);
         }
+
         if (!empty($user_id)) {
             $_SESSION['user_id'] = $user_id;
             $_SESSION['isLoggedIn'] = true;
