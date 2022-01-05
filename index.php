@@ -1,46 +1,28 @@
 <?php
-// -----  SESSION -----
-// Create new session if there is no creationTime.
-if (!isset($_SESSION['creationTime'])) {
-    session_start();
-    $_SESSION['creationTime'] = time();
-
-// Delete old and create new session if current session lasts longer than hour.
-} else if (time() - $_SESSION['creationTime'] > 3600) {
-    session_unset();
-    session_destroy();
-
-    session_start();
-    $_SESSION['creationTime'] = time();
-
-// If session last activity was 30 minutes ago delete old and create new session.
-} else if (time() - $_SESSION['lastActivityTime'] > 1800) {
-    session_unset();
-    session_destroy();
-    session_start();
-    $_SESSION['creationTime'] = time();
-
-// If session last activity was 15 minutes ago change session ID.
-} else if (time() - $_SESSION['lastActivityTime'] > 900) {
-    session_regenerate_id(true);
-}
-$_SESSION['lastActivityTime'] = time();
-// ----- /SESSION -----
-
+session_start();
 
 // -----  ROUTING -----
-include("src/Service/RoutingService.php");
+include('src/Service/RoutingService.php');
 
 use src\Service\RoutingService\RoutingService;
 
 if (!isset($GLOBALS['routingService'])) {
-    $_SESSION['siteMode'] = yaml_parse_file("config/parameters.yaml")['siteMode'];
     $GLOBALS['routingService'] = new RoutingService();
 }
 
-if ($_SERVER['REQUEST_URI'] === '/') {
-    $_SERVER['REQUEST_URI'] .= 'login';
-}
+// checking session after every redirection
+require($GLOBALS['routingService']->getRoute('listener-session_checker'));
 
-require($GLOBALS['routingService']->getRoute('default-' . $_SERVER['REQUEST_URI']));
-// ----- /ROUTING -----
+if (in_array($_SERVER['REQUEST_URI'], ['/api/start', '/api/stop', '/api/break', '/api/logout'])) {
+    require($GLOBALS['routingService']->getRoute('api-listener'));
+
+} else {
+    if ($_SERVER['REQUEST_URI'] === '/' || $_SERVER['REQUEST_URI'] == '/main' || $_SERVER['REQUEST_URI'] == '/login') {
+        if (isset($_SESSION['user_id'])) {
+            $_SERVER['REQUEST_URI'] = '/main';
+        } else {
+            $_SERVER['REQUEST_URI'] = '/login';
+        }
+    }
+    require($GLOBALS['routingService']->getRoute('default-' . $_SERVER['REQUEST_URI']));
+}

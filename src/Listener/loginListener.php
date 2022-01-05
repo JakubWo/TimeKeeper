@@ -21,17 +21,9 @@ function authenticateUser(): void
         unset($GLOBALS['dbService']);
         unset($_SESSION['isLoggedIn']);
 
-        $_SESSION['login_result'] = 'Login and/or password is incorrect.';
-        header('Location: /login');
-
+        $_SESSION['loginResult'] = 'Login and/or password is incorrect.';
     } else {
-        // Just to see login result.
-        ErrorService::manualError(
-            'Logged in',
-            $_SESSION['isLoggedIn'],
-            'User id: ' . $_SESSION['user_id']
-        );
-        header('Location: /error');
+        session_regenerate_id(true);
     }
-
+    header('Location: /');
 }

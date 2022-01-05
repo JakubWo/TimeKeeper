@@ -1,33 +1,32 @@
 <?php
 
+include 'FixtureService.php';
+
+use src\Fixture\FixtureService\FixturesService;
+
 generateUsers();
 
-function generateUsers(){
-    $dbConnectionData = yaml_parse_file("../../config/parameters.yaml")["database"];
-    $db = new PDO(
-        'mysql:host=' . $dbConnectionData['host'] .
-        ';dbname=' . $dbConnectionData['database'] .
-        ';charset=ascii',
-        $dbConnectionData['username'],
-        $dbConnectionData['password']
-    );
+function generateUsers()
+{
+    $fs = new FixturesService();
+    $db = $fs->getDb();
 
     $users = getDataArray();
     for ($i = 0; $i < sizeof($users['username']); $i++) {
         $query = $db->prepare(
-            'INSERT INTO tk_user(username, passw, is_admin, balance, time_zone) VALUES(
-                                                                          "'.$users['username'][$i].'", 
-                                                                          "'.$users['password'][$i].'",
-                                                                          "'.$users['is_admin'][$i].'",
-                                                                          "'.$users['balance'][$i].'",
-                                                                          "'.$users['time_zone'][$i].'"
+            'INSERT INTO tk_user(username, passw, balance, time_zone, is_admin, salt) VALUES(
+                                                                          "' . $users['username'][$i] . '", 
+                                                                          "' . $users['password'][$i] . '",
+                                                                          "' . $users['balance'][$i] . '",
+                                                                          "' . $users['time_zone'][$i] . '",
+                                                                          "' . $users['is_admin'][$i] . '",
+                                                                          "' . $users['salt'][$i] . '"
                                                                         )'
         );
 
         $query->execute();
-        if($query->errorCode() !== '00000') {
-            print_r($query->errorInfo());
-            print_r("Data insertion stopped\n");
+        if ($query->errorCode() !== '00000') {
+            $fs->printErrorMessage($query);
             return;
         }
     }
@@ -38,26 +37,27 @@ function generateUsers(){
 function getDataArray(): array
 {
     return [
-        "username" => [
-            "admin@mail.pl",
-            "glowny_kierownik@mail.pl",
-            "kierownik@mail.pl",
-            "pracownik_IT@mail.pl",
-            "pracownik_IT2@mail.pl",
-            "pracownik_biuro@mail.pl",
-            "pracownik_kiegowosci@mail.pl",
+        'username' => [
+            'admin@mail.pl',
+            'glowny_kierownik@mail.pl',
+            'kierownik@mail.pl',
+            'pracownik_IT@mail.pl',
+            'pracownik_IT2@mail.pl',
+            'pracownik_biuro@mail.pl',
+            'pracownik_kiegowosci@mail.pl',
         ],
-        "password" => [
-            "admin",
-            "hq1",
-            "kierownik",
-            "password",
-            "haslo",
-            "123",
-            "Si1n3P455!@#dw"
+        'password' => [
+            'admin',
+            'hq1',
+            'kierownik',
+            'password',
+            'haslo',
+            '123',
+            'Si1n3P455!@#dw'
         ],
-        "is_admin" => [ 1, 0, 0, 0, 0, 0, 0 ],
-        "balance" => [0, 0, 0, 0, 0, 100, -100],
-        "time_zone" => [-2, 0, 0, 1, 1, 0, 0]
+        'balance' => [0, 0, 0, 0, 0, 100, -100],
+        'time_zone' => [-2, 0, 0, 1, 1, 0, 0],
+        'is_admin' => [1, 0, 0, 0, 0, 0, 0],
+        'salt' => ['asd', 'xdd', '2d1', 'dsh', '123', 'dhA', 'xh0']
     ];
 }

@@ -1,26 +1,41 @@
 default:
-  /redirect: "src/redirect.php"
-  /login: "src/Template/login.php"
-  /error: "src/Template/error.php"
-  /login_authorization: "src/Listener/loginAuthorization.php"
+  /error: "src/View/error.php"
+  /login: "src/View/login.php"
+  /login_authorization: "src/Listener/loginListener.php"
+  /main: "src/View/main.php"
+
+api:
+  listener: "src/Listener/apiListener.php"
 
 config:
   parameters: "config/parameters.yaml"
 
 image:
-  favicon: "http://tk.localhost/assets/Image/TimeKeeper.png"
-
-style:
-  error: "http://tk.localhost/assets/Style/error.css"
-  login: "assets/Style/login.css"
+  favicon: "assets/Image/TimeKeeper.png"
 
 js:
-  login: "assets/src/login.js"
+  console: "assets/src/console.js"
   error: "assets/src/error.js"
+  login: "assets/src/login.js"
+  main: "assets/src/main.js"
 
-#template:
+listener:
+  session_checker: "src/Listener/sessionLifespanListener.php"
 
 service:
+  api: "src/Service/ApiService.php"
   auth: "src/Service/AuthService.php"
   db: "src/Service/DatabaseService.php"
   error: "src/Service/ErrorService.php"
+
+style:
+  console: "assets/Style/console.css"
+  error: "assets/Style/error.css"
+  login: "assets/Style/login.css"
+  main: "assets/Style/main.css"
+
+view:
+  console: "src/View/console.html"
+
+vendor:
+  jquery: "vendor/jquery-3.6.0.min.js"
