@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
     const error_alert_text = "Couldn't connect to server API. Please try again.\n" +
         "If error continues contact server admin.";
 
@@ -13,9 +13,11 @@ $(document).ready(function () {
 
     if (start_button.is(":disabled") && stop_button.is(":disabled") && break_button.is(":disabled")) {
         start_button.prop("disabled", false);
+        stop_button.prop("disabled", false);
+        break_button.prop("disabled", false);
     }
 
-    custom_time_checkbox.change(function () {
+    custom_time_checkbox.on("change", function () {
         if (this.checked) {
             custom_time_input.prop("disabled", false);
         } else {
@@ -23,7 +25,10 @@ $(document).ready(function () {
         }
     });
 
-    start_button.click(function () {
+    /*
+        START EVENT
+     */
+    start_button.on("click", function () {
         if (custom_time_input.val() === '' && custom_time_checkbox.is(":checked")) {
             alert("Time input box not/partially filled.\nPlease uncheck custom time or enter valid time.");
             custom_time_input.get(0).setCustomValidity("Invalid field.");
@@ -47,35 +52,49 @@ $(document).ready(function () {
                 // break_button.prop("disabled", false);
             },
             error: function () {
-                console.log('error');
+                console.log(error_alert_text);
                 // alert(error_alert_text);
             }
         });
     });
 
-    stop_button.click(function () {
+    /*
+        STOP EVENT
+     */
+    stop_button.on("click", function () {
         $.ajax({
+            type: "POST",
+            dataType: "json",
             url: "/api/stop",
-            success: function () {
-                start_button.prop("disabled", false);
-                stop_button.prop("disabled", true);
-                break_button.prop("disabled", true);
+            success: function (response) {
+                console.log(response);
+                // start_button.prop("disabled", false);
+                // stop_button.prop("disabled", true);
+                // break_button.prop("disabled", true);
             },
             error: function () {
-                alert(error_alert_text);
+                console.log(error_alert_text);
+                // alert(error_alert_text);
             }
         });
     });
 
-    break_button.click(function () {
+    /*
+        BREAK EVENT
+     */
+    break_button.on("click", function () {
         $.ajax({
+            type: "POST",
+            dataType: "json",
             url: "/api/break",
-            success: function () {
-                start_button.prop("disabled", false);
-                break_button.prop("disabled", true);
+            success: function (response) {
+                console.log(response);
+                // start_button.prop("disabled", false);
+                // break_button.prop("disabled", true);
             },
             error: function () {
-                alert(error_alert_text);
+                console.log(error_alert_text);
+                // alert(error_alert_text);
             }
         });
     });

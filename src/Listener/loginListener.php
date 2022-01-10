@@ -4,16 +4,13 @@
 
 include($GLOBALS['routingService']->getRoute('service-auth'));
 include($GLOBALS['routingService']->getRoute('service-db'));
-include($GLOBALS['routingService']->getRoute('service-error'));
 
 use src\Service\AuthService\AuthService;
-use src\Service\DatabaseService\DatabaseService;
 
 authenticateUser();
 
 function authenticateUser(): void
 {
-    $GLOBALS['dbService'] = new DatabaseService();
     AuthService::authenticate();
 
     if (!$_SESSION['isLoggedIn']) {

@@ -15,11 +15,8 @@ class AuthService
 
         // validation!
 
-        if (!isset($GLOBALS['dbService'])) {
-            $GLOBALS['dbService'] = new DatabaseService();
-        }
-
-        $db = $GLOBALS['dbService']->getDb();
+        $dbService = new DatabaseService();
+        $db = $dbService->getDb();
 
         try {
             $st = $db->prepare('SELECT check_user(?, ?)');
