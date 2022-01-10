@@ -2,50 +2,62 @@
 
 namespace src\Service\ErrorService;
 
-class ErrorService{
-
-    public static function manualError(string $title, bool $message, string $details, int $time = 0) : void
+class ErrorService
+{
+    /*
+     *
+     */
+    public static function generate(
+        string $title,
+        string $message = null,
+        array  $details = null,
+        bool   $setCookie = false,
+        int    $time = 0
+    ): array
     {
         if (yaml_parse_file($GLOBALS['routingService']->getRoute('config-parameters'))['siteMode'] === 'DEV') {
-            self::createCookie([
-                'title' => $title,
-                'message' => $message,
-                'details' => $details
-            ], $time);
-        } else {
-            self::prodError();
-        }
-    }
-
-    public static function PDOError(string $title, string $message, array $trace, int $time = 0) : void
-    {
-        if (yaml_parse_file($GLOBALS['routingService']->getRoute('config-parameters'))['siteMode'] === 'DEV') {
-            $cookieContent['title'] = $title;
-            $cookieContent['message'] = $message;
-
-            $i = 0;
-            foreach ($trace as $array) {
-                $cookieContent['details'] .= '(' . ++$i . ') In file: ' . $array['file'] . '(' . $array['line'] . '): '
-                    . $array['class'] . $array['type'] . $array['function'] . '<br>';
+            $errorArray['title'] = $title;
+            if (isset($message)) {
+                $errorArray['message'] = $message;
             }
-            self::createCookie($cookieContent, $time);
+
+            if ($details !== null) {
+                $i = 0;
+                foreach ($details as $array) {
+                    $errorArray['details'] .= '(' . ++$i . ') In file: ' . $array['file'] . '(' . $array['line'] . '): '
+                        . $array['class'] . $array['type'] . $array['function'] . "\n";
+                }
+            }
+
         } else {
-            self::prodError();
+            $errorArray = self::prodDefaultError();
         }
+
+        if ($setCookie) {
+            self::createCookie($errorArray, $time);
+        }
+
+        return $errorArray;
     }
 
-    private static function createCookie(array $cookieContent, int $time) : void
+    /*
+     *
+     */
+    private static function prodDefaultError(): array
     {
-        setcookie('error', serialize($cookieContent), $time === 0 ? time()+60 : $time, '/');
-    }
-
-    private static function prodError()
-    {
-        setcookie('error', serialize([
-            'title' => 'Unexpected error occurred!',
+        return [
+            'title' => 'Unexpected error occurred',
             'message' => 'Something went wrong, please try again.',
-            'details' => 'If error reappears please contact us through <i>'.$_SERVER['SERVER_ADMIN'].
+            'details' => 'If error reappears please contact us through <i>' . $_SERVER['SERVER_ADMIN'] .
                 '</i> address.'
-        ]), time()+60, '/');
+        ];
+    }
+
+    /*
+     *
+     */
+    private static function createCookie(array $cookieContent, int $time): void
+    {
+        setcookie('error', serialize($cookieContent), $time === 0 ? time() + 60 : $time, '/', '', true);
     }
 }

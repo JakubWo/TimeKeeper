@@ -1,8 +1,7 @@
 <?php
 session_start();
-
 // -----  ROUTING -----
-include('src/Service/RoutingService.php');
+require('src/Service/RoutingService.php');
 
 use src\Service\RoutingService\RoutingService;
 
@@ -13,9 +12,14 @@ if (!isset($GLOBALS['routingService'])) {
 // checking session after every redirection
 require($GLOBALS['routingService']->getRoute('listener-session_checker'));
 
-if (in_array($_SERVER['REQUEST_URI'], ['/api/start', '/api/stop', '/api/break', '/api/logout'])) {
-    require($GLOBALS['routingService']->getRoute('api-listener'));
+// temporary solution, login_authorization will be part of api or action login will be created
+if ($_SERVER['REQUEST_URI'] === '/api/login') {
+    require($GLOBALS['routingService']->getRoute('default-/login_authorization'));
+    exit();
+}
 
+if (in_array($_SERVER['REQUEST_URI'], ['/api/start', '/api/stop', '/api/break', '/api/logout', '/api/login'])) {
+    require($GLOBALS['routingService']->getRoute('api-listener'));
 } else {
     if ($_SERVER['REQUEST_URI'] === '/' || $_SERVER['REQUEST_URI'] == '/main' || $_SERVER['REQUEST_URI'] == '/login') {
         if (isset($_SESSION['user_id'])) {

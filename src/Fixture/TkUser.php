@@ -56,7 +56,15 @@ function getDataArray(): array
             'Si1n3P455!@#dw'
         ],
         'balance' => [0, 0, 0, 0, 0, 100, -100],
-        'time_zone' => [-2, 0, 0, 1, 1, 0, 0],
+        'time_zone' => [
+            'Europe/Warsaw',
+            'Europe/Warsaw',
+            'Africa/Abidjan',
+            'Africa/Abidjan',
+            'Europe/Warsaw',
+            'Europe/London',
+            'Europe/Warsaw'
+        ],
         'is_admin' => [1, 0, 0, 0, 0, 0, 0],
         'salt' => ['asd', 'xdd', '2d1', 'dsh', '123', 'dhA', 'xh0']
     ];

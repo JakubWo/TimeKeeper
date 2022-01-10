@@ -10,6 +10,11 @@ class AuthService
 
     public static function authenticate(): void
     {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        // validation!
+
         if (!isset($GLOBALS['dbService'])) {
             $GLOBALS['dbService'] = new DatabaseService();
         }
@@ -18,13 +23,14 @@ class AuthService
 
         try {
             $st = $db->prepare('SELECT check_user(?, ?)');
-            $st->execute([$_POST['email'], $_POST['password']]);
+            $st->execute([$email, $password]);
             $user_id = $st->fetchColumn();
         } catch (\PDOException $PDOException) {
-            ErrorService::PDOError(
+            ErrorService::generate(
                 'Database login authorization exception.',
                 $PDOException->getMessage(),
-                $PDOException->getTrace()
+                $PDOException->getTrace(),
+                true,
             );
             header('Location: /error',);
         }

@@ -8,7 +8,6 @@ include($GLOBALS['routingService']->getRoute('service-error'));
 
 use src\Service\AuthService\AuthService;
 use src\Service\DatabaseService\DatabaseService;
-use src\Service\ErrorService\ErrorService;
 
 authenticateUser();
 
