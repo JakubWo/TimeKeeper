@@ -1,18 +1,18 @@
 <?php
 
-namespace src\Service\AuthService;
+namespace src\Service\ApiActions;
 
 use DateTime;
 use Exception;
+use src\Service\ApiService\ApiService;
 use src\Service\DatabaseService\DatabaseService;
 
-class AuthService
+class loginAction extends ApiService
 {
-
     /**
      * @throws Exception
      */
-    public static function authenticate(): array
+    public static function run(): array
     {
         $email = $_POST['email'];
         $password = $_POST['password'];
@@ -24,11 +24,10 @@ class AuthService
         $ipInDatabase = $_SERVER['REMOTE_ADDR'] === $blockedIp['ip'];
 
         if ($ipInDatabase && $now < $blockedIp['blocked_until']) {
-            throw new Exception('Action failed: Blocked for ' .
-                ($blockedIp['blocked_until'] - $now) . ' seconds');
+            return self::errorResponse('Blocked for ' . ($blockedIp['blocked_until'] - $now) . ' seconds');
         }
 
-        $invalidData = 'Action failed: ';
+        $invalidData = '';
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $invalidData .= 'Invalid Email;';
         }
@@ -36,23 +35,20 @@ class AuthService
             $invalidData .= 'Invalid Password';
         }
 
-        if (strlen($invalidData) > 15) {
-            throw new Exception($invalidData);
+        if (strlen($invalidData) > 0) {
+            return self::errorResponse($invalidData);
         }
 
         $userId = $dbService->getCheckUserCredentials([$email, $password]);
 
         if (empty($userId)) {
             $dbService->updateBlockedIpInfo($_SERVER['REMOTE_ADDR'], $now + 5, $ipInDatabase);
-            throw new Exception('Action failed: Email and/or password is incorrect');
+            return self::errorResponse('Email and/or password is incorrect');
         }
 
         $_SESSION['user_id'] = $userId;
         session_regenerate_id(true);
-        return [
-            'result' => 'Success',
-            'action' => 'Logged in',
-            'data' => []
-        ];
+        return self::successResponse('Logged in');
     }
 }
+

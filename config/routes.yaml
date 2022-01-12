@@ -5,6 +5,12 @@ default:
 
 api:
   listener: "src/Listener/apiListener.php"
+  loginAction: "src/Service/ApiActions/loginAction.php"
+  logoutAction: "src/Service/ApiActions/logoutAction.php"
+  startAction: "src/Service/ApiActions/startAction.php"
+  breakAction: "src/Service/ApiActions/breakAction.php"
+  stopAction: "src/Service/ApiActions/stopAction.php"
+
 
 config:
   parameters: "config/parameters.yaml"
@@ -24,7 +30,6 @@ listener:
 
 service:
   api: "src/Service/ApiService.php"
-  auth: "src/Service/AuthService.php"
   db: "src/Service/DatabaseService.php"
   error: "src/Service/ErrorService.php"
 

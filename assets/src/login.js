@@ -63,8 +63,7 @@ $(function () {
                     if (response['response']['result'] === 'Success') {
                         $("#login_form").trigger("submit");
                     } else {
-                        const apiErrorDetails = response['response']['error']['title'].split('Action failed: ')[1];
-                        error_login.text(apiErrorDetails);
+                        error_login.text(response['response']['error']['title']);
                     }
                 },
                 error: function () {
