@@ -2,41 +2,57 @@
 
 namespace src\Service\AuthService;
 
+use DateTime;
+use Exception;
 use src\Service\DatabaseService\DatabaseService;
-use src\Service\ErrorService\ErrorService;
 
 class AuthService
 {
 
-    public static function authenticate(): void
+    /**
+     * @throws Exception
+     */
+    public static function authenticate(): array
     {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        // validation!
-
         $dbService = new DatabaseService();
-        $db = $dbService->getDb();
+        $now = (new DateTime())->getTimestamp();
 
-        try {
-            $st = $db->prepare('SELECT check_user(?, ?)');
-            $st->execute([$email, $password]);
-            $user_id = $st->fetchColumn();
-        } catch (\PDOException $PDOException) {
-            ErrorService::generate(
-                'Database login authorization exception.',
-                $PDOException->getMessage(),
-                $PDOException->getTrace(),
-                true,
-            );
-            header('Location: /error',);
+        $blockedIp = $dbService->getBlockedIp($_SERVER['REMOTE_ADDR']);
+        $ipInDatabase = $_SERVER['REMOTE_ADDR'] === $blockedIp['ip'];
+
+        if ($ipInDatabase && $now < $blockedIp['blocked_until']) {
+            throw new Exception('Action failed: Blocked for ' .
+                ($blockedIp['blocked_until'] - $now) . ' seconds');
         }
 
-        if (!empty($user_id)) {
-            $_SESSION['user_id'] = $user_id;
-            $_SESSION['isLoggedIn'] = true;
-        } else {
-            $_SESSION['isLoggedIn'] = false;
+        $invalidData = 'Action failed: ';
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $invalidData .= 'Invalid Email;';
         }
+        if (strlen($password) === 0) {
+            $invalidData .= 'Invalid Password';
+        }
+
+        if (strlen($invalidData) > 15) {
+            throw new Exception($invalidData);
+        }
+
+        $userId = $dbService->getCheckUserCredentials([$email, $password]);
+
+        if (empty($userId)) {
+            $dbService->updateBlockedIpInfo($_SERVER['REMOTE_ADDR'], $now + 5, $ipInDatabase);
+            throw new Exception('Action failed: Email and/or password is incorrect');
+        }
+
+        $_SESSION['user_id'] = $userId;
+        session_regenerate_id(true);
+        return [
+            'result' => 'Success',
+            'action' => 'Logged in',
+            'data' => []
+        ];
     }
 }

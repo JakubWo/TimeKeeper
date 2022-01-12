@@ -1,7 +1,6 @@
 default:
   /error: "src/View/error.php"
   /login: "src/View/login.php"
-  /login_authorization: "src/Listener/loginListener.php"
   /main: "src/View/main/main.php"
 
 api:

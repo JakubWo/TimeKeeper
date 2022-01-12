@@ -38,6 +38,21 @@ class DatabaseService
     /**
      * @throws PDOException
      */
+    public function getCheckUserCredentials(array $credentials): ?int
+    {
+        $query = $this->db->prepare('SELECT check_user(?, ?)');
+        $query->execute($credentials);
+
+        if ($query->errorCode() !== "00000") {
+            return null;
+        }
+
+        return $query->fetchColumn();
+    }
+
+    /**
+     * @throws PDOException
+     */
     public function startEvent(array $args): bool
     {
         $query = $this->db->prepare('CALL start_event(?, ?, ?, ?, ?);');
@@ -164,14 +179,38 @@ class DatabaseService
         return $query->fetchAll();
     }
 
-
     /**
-     * @return PDO
+     * @throws PDOException
      */
-    public function getDb(): PDO
+    public function getBlockedIp(string $ip): ?array
     {
-        return $this->db;
+        $query = $this->db->prepare('SELECT ip, blocked_until FROM blocked_ip WHERE ip=?;');
+        $query->execute([$ip]);
+
+        if ($query->errorCode() !== "00000") {
+            return null;
+        }
+
+        return $query->fetchAll()[0];
     }
 
+    /**
+     * @throws PDOException
+     */
+    public function updateBlockedIpInfo(string $ip, int $blockedUntil, bool $inDatabase): bool
+    {
+        if ($inDatabase) {
+            $query = $this->db->prepare('UPDATE blocked_ip SET blocked_until = ? WHERE ip = ?;');
+        } else {
+            $query = $this->db->prepare('INSERT INTO blocked_ip(blocked_until, ip) VALUES (?, ?);');
+        }
+        $query->execute([$blockedUntil, $ip]);
+
+        if ($query->errorCode() !== "00000") {
+            return false;
+        }
+
+        return true;
+    }
 
 }

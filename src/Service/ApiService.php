@@ -5,6 +5,7 @@ namespace src\Service\ApiService;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use src\Service\AuthService\AuthService;
 use src\Service\DatabaseService\DatabaseService;
 
 class ApiService
@@ -21,6 +22,11 @@ class ApiService
     private const STANDARD_WORK_TIME = 28800;
     private const MAX_BREAK_TIME = 900;
 
+
+    public static function login(): array
+    {
+        return AuthService::authenticate();
+    }
 
     public static function logout(): array
     {
@@ -47,7 +53,7 @@ class ApiService
         $lastEventType = $dbService->getWorkdayLastEventType($lastWorkdayId);
 
         if ($lastEventType === 'start') {
-            throw new Exception('Cannot make another start event before ending last workday');
+            throw new Exception('Action failed: Cannot make another start event before ending last workday');
         } elseif ($lastEventType === 'break') {
             if ($dbService->stopBreakEvent($lastWorkdayId)) {
                 http_response_code(201);
@@ -66,14 +72,14 @@ class ApiService
 
         $userDbTimeZone = $dbService->getUserTimeZone($userId);
         if ($userDbTimeZone === null) {
-            throw new Exception('Database error');
+            throw new Exception('Action failed: Database error');
         }
 
         $userTime = $dateTime->format('Y-m-d H:i:s');
 
         if (!empty($userInputTimeZone)) {
             if (!is_string($userInputTimeZone)) {
-                throw new Exception('Invalid time_zone format');
+                throw new Exception('Action failed: Invalid time_zone format');
             } else {
                 $dateTime->setTimezone(new DateTimeZone($userInputTimeZone));
             }
@@ -90,7 +96,7 @@ class ApiService
 
             $note['CustomStart'] = strtotime($userInputTime) - strtotime('00:00');
             if (!preg_match('/^\d{2}:\d{2}$/', $userInputTime)) {
-                throw new Exception('Invalid custom time input');
+                throw new Exception('Action failed: Invalid custom time input');
             }
 
             $userInputTimeParts = explode(':', $userInputTime);
@@ -148,9 +154,9 @@ class ApiService
         $lastEventType = $dbService->getWorkdayLastEventType($workdayId);
 
         if ($lastEventType === 'break') {
-            throw new Exception('Already on break');
+            throw new Exception('Action failed: Already on break');
         } elseif ($lastEventType === 'stop') {
-            throw new Exception('Cannot take break before starting or after ending a workday');
+            throw new Exception('Action failed: Cannot take break before starting or after ending a workday');
         }
 
         if (!$dbService->breakEvent($workdayId)) {
@@ -179,7 +185,7 @@ class ApiService
 
         $times[] = $dateTime->format('Y-m-d H:i:s');
         if ($lastWorkdayEvents[0]['event_type'] === 'stop') {
-            throw new Exception('Cannot stop not started workday');
+            throw new Exception('Action Failed: Cannot stop not started workday');
         }
 
         foreach ($lastWorkdayEvents as $event) {

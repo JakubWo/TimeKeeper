@@ -1,5 +1,5 @@
 $(function () {
-    const error_alert_text = "Couldn't connect to server API. Please try again.\n" +
+    const error_alert_text = "Couldn't connect to API. Please try again.\n" +
         "If error continues contact server admin.";
 
     const start_button = $("#start");
