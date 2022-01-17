@@ -18,7 +18,8 @@ class stopAction extends ApiController
         $dbService = new DatabaseService();
 
         $userId = $_SESSION['user_id'];
-        $workdayId = $dbService->getWorkdays($userId, 1)[0]['workday_id']; // swap that with get workdays
+        $currentWorkday = $dbService->getWorkdays($userId, 1)[0];
+        $workdayId = $currentWorkday['workday_id'];
         $lastWorkdayEvents = $dbService->getWorkdayEvents($workdayId);
 
         $times[] = $dateTime->format('Y-m-d H:i:s');
@@ -66,17 +67,17 @@ class stopAction extends ApiController
             $workdayType = self::IRREGULAR;
         }
 
+        if ($currentWorkday['workday_type'] === 'irregular') {
+            $workdayType = self::IRREGULAR;
+        }
+        if ($currentWorkday['is_accepted'] == 0) {
+            $isWorkdayAccepted = 0;
+        }
 
-        // swap STOP EVENT db procedure actions to check things in here
-//        $workday = $dbService->getWorkdays($userId, 1);
-
-//        if ($workday[0]['workday_type'] === 'irregular') {
-//            echo "XD";
-//        }
-//        die;
-
+        $note = array_merge(self::notesToArray($currentWorkday['notes']), $note);
 
         if (!$dbService->stopEvent([
+            $userId,
             $workdayId,
             $totalWorkTimeInSeconds,
             $workdayType,
@@ -107,7 +108,8 @@ class stopAction extends ApiController
                 ),
                 'workday_type' => $workdayType,
                 'is_accepted' => $isWorkdayAccepted,
-                'notes' => $note
+                'notes' => $note,
+                'events' => $lastWorkdayEvents
             ]
         );
     }

@@ -94,8 +94,7 @@ function run(): void
             true
         );
 
-        $api_response = ApiController::errorResponse(500);
-
+        $api_response = ApiController::errorResponse('Unexpected error', 500);
     }
 
     $response = json_encode(["response" => $api_response]);

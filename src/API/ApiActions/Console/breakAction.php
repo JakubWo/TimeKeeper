@@ -16,8 +16,8 @@ class breakAction extends ApiController
         $dbService = new DatabaseService();
 
         $userId = $_SESSION['user_id'];
-        $workdayId = $dbService->getUserLastWorkdayId($userId);
-        $lastEventType = $dbService->getWorkdayLastEventType($workdayId);
+        $workdayId = $dbService->getWorkdays($userId, 1)[0]['workday_id'];
+        $lastEventType = $dbService->getWorkdayEvents($workdayId)[0]['event_type'];
 
         if ($lastEventType === 'break') {
             return self::errorResponse('Already on break');

@@ -19,8 +19,8 @@ class startAction extends ApiController
         $dbService = new DatabaseService();
 
         $userId = $_SESSION['user_id'];
-        $lastWorkdayId = $dbService->getUserLastWorkdayId($userId);
-        $lastEventType = $dbService->getWorkdayLastEventType($lastWorkdayId);
+        $lastWorkdayId = $dbService->getWorkdays($userId, 1)[0]['workday_id'];
+        $lastEventType = $dbService->getWorkdayEvents($lastWorkdayId)[0]['event_type'];
 
         if ($lastEventType === 'start') {
             return self::errorResponse('Cannot make another start event before ending last workday');

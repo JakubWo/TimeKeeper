@@ -97,7 +97,7 @@ class DatabaseService
      */
     public function stopEvent(array $args): bool
     {
-        $query = $this->db->prepare('CALL stop_event(?, ?, ?, ?, ?);');
+        $query = $this->db->prepare('CALL stop_event(?, ?, ?, ?, ?, ?);');
         $query->execute($args);
 
         if ($query->errorCode() !== "00000") {
@@ -111,38 +111,12 @@ class DatabaseService
      */
     public function getUserTimeZone(int $userId): ?string
     {
-        $query = $this->db->prepare('SELECT get_user_time_zone(?);');
+        $query = $this->db->prepare(
+            'SELECT time_zone 
+                FROM tk_user 
+                WHERE user_id = ?'
+        );
         $query->execute([$userId]);
-
-        if ($query->errorCode() !== "00000") {
-            return null;
-        }
-
-        return $query->fetchColumn();
-    }
-
-    /**
-     * @throws PDOException
-     */
-    public function getUserLastWorkdayId(int $userId): ?int
-    {
-        $query = $this->db->prepare('CALL get_user_last_workday_id(?);');
-        $query->execute([$userId]);
-
-        if ($query->errorCode() !== "00000") {
-            return null;
-        }
-
-        return $query->fetchColumn();
-    }
-
-    /**
-     * @throws PDOException
-     */
-    public function getWorkdayLastEventType(int $workdayId): ?string
-    {
-        $query = $this->db->prepare('CALL get_user_last_event_type(?);');
-        $query->execute([$workdayId]);
 
         if ($query->errorCode() !== "00000") {
             return null;
@@ -156,13 +130,17 @@ class DatabaseService
      */
     public function getWorkdayEvents(int $workdayId): ?array
     {
-        $query = $this->db->prepare('CALL get_workday_events(?);');
+        $query = $this->db->prepare(
+            'SELECT event_type, event_timestamp FROM tk_event 
+		        WHERE workday_id = ? 
+                ORDER BY event_id DESC;'
+        );
         $query->execute([$workdayId]);
 
         if ($query->errorCode() !== "00000") {
             return null;
         }
-        return $query->fetchAll();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

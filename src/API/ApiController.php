@@ -42,7 +42,7 @@ class ApiController
         return $notes_array;
     }
 
-    public static function errorResponse($title = 'Unexpected error', $code = 400): array
+    public static function errorResponse(string $title, int $code = 400): array
     {
         http_response_code($code);
         return [
@@ -52,7 +52,7 @@ class ApiController
         ];
     }
 
-    protected static function successPostResponse(string $action, $code = 200, array $data = []): array
+    protected static function successPostResponse(string $action, int $code = 200, array $data = []): array
     {
         http_response_code($code);
         return [
