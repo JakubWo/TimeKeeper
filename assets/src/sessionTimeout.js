@@ -1,4 +1,4 @@
-const maxIdleTime = 1800000; // in milliseconds
+const maxIdleTime = 1800000;
 let idleTimeout;
 
 function resetIdleTimeout() {
@@ -6,10 +6,9 @@ function resetIdleTimeout() {
     idleTimeout = setTimeout(() => window.location.replace('/'), maxIdleTime)
 }
 
-$(document).ready(function () {
+$(document).on("ready", function () {
     resetIdleTimeout();
 
-    // Reset the idle timeout on any of the events listed below
     ['click', 'touchstart', 'mousemove'].forEach(event =>
         document.addEventListener(event, resetIdleTimeout)
     );

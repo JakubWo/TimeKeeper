@@ -61,7 +61,7 @@ $(function () {
                 success: function (response) {
                     console.log(response);
                     if (response['response']['result'] === 'Success') {
-                        $("#login_form").trigger("submit");
+                        window.location.replace('/');
                     } else {
                         error_login.text(response['response']['error']['title']);
                     }

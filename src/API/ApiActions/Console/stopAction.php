@@ -1,13 +1,13 @@
 <?php
 
-namespace src\Service\ApiActions;
+namespace src\API\ApiActions;
 
 use DateTime;
 use Exception;
-use src\Service\ApiService\ApiService;
+use src\API\ApiController\ApiController;
 use src\Service\DatabaseService\DatabaseService;
 
-class stopAction extends ApiService
+class stopAction extends ApiController
 {
     /**
      * @throws Exception
@@ -86,13 +86,25 @@ class stopAction extends ApiService
             return self::errorResponse('Action failed');
         }
 
+        $totalWorkTime = self::secondsToTime($totalWorkTimeInSeconds);
+        $totalBreakTime = self::secondsToTime($totalBreakTimeInSeconds);
 
-        http_response_code(201);
-        return self::successResponse(
+        return self::successPostResponse(
             'Stop workday',
+            200,
             [
-                'total_work_time' => self::secondsToTime($totalWorkTimeInSeconds),
-                'total_break_time' => self::secondsToTime($totalBreakTimeInSeconds),
+                'total_work_time' => sprintf(
+                    '%02d:%02d:%02d',
+                    $totalWorkTime['hours'],
+                    $totalWorkTime['minutes'],
+                    $totalWorkTime['seconds']
+                ),
+                'total_break_time' => sprintf(
+                    '%02d:%02d:%02d',
+                    $totalBreakTime['hours'],
+                    $totalBreakTime['minutes'],
+                    $totalBreakTime['seconds']
+                ),
                 'workday_type' => $workdayType,
                 'is_accepted' => $isWorkdayAccepted,
                 'notes' => $note

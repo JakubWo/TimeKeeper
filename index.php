@@ -14,7 +14,7 @@ require($GLOBALS['routingService']->getRoute('listener-session_checker'));
 
 
 if (strpos($_SERVER['REQUEST_URI'], '/api/') === 0) {
-    require($GLOBALS['routingService']->getRoute('api-listener'));
+    require($GLOBALS['routingService']->getRoute('listener-api'));
 } else {
     if ($_SERVER['REQUEST_URI'] === '/' || $_SERVER['REQUEST_URI'] == '/main' || $_SERVER['REQUEST_URI'] == '/login') {
         if (isset($_SESSION['user_id'])) {

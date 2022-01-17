@@ -168,43 +168,81 @@ class DatabaseService
     /**
      * @throws PDOException
      */
-    public function getWorkdays(int $userId, int $n): ?array
+    public function getWorkdays(int $userId, int $n = null): ?array
     {
-        $query = $this->db->prepare('CALL get_workdays(?, ?);');
-        $query->execute([$userId, $n]);
-
-        if ($query->errorCode() !== "00000") {
-            return null;
+        if ($n === null) {
+            $query = $this->db->prepare(
+                'SELECT workday_id, workday_date, workday_type, is_accepted, notes 
+                    FROM workday 
+                    WHERE user_id = ?
+                    ORDER BY workday_id DESC;'
+            );
+            $query->execute([$userId]);
+        } else {
+            $query = $this->db->prepare('CALL get_workdays(?, ?);');
+            $query->execute([$userId, $n]);
         }
-        return $query->fetchAll();
-    }
-
-    /**
-     * @throws PDOException
-     */
-    public function getBlockedIp(string $ip): ?array
-    {
-        $query = $this->db->prepare('SELECT ip, blocked_until FROM blocked_ip WHERE ip=?;');
-        $query->execute([$ip]);
 
         if ($query->errorCode() !== "00000") {
             return null;
         }
 
-        return $query->fetchAll()[0];
+        return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
      * @throws PDOException
      */
-    public function updateBlockedIpInfo(string $ip, int $blockedUntil, bool $inDatabase): bool
+    public function getWorkdaysById(array $ids): ?array
+    {
+        $statement = '
+                SELECT workday_id, workday_date, workday_type, is_accepted, notes, user_id
+                FROM workday 
+                WHERE workday_id = ?
+        ';
+        for ($i = 1; $i < count($ids); $i++) {
+            $statement .= ' OR workday_id = ?';
+        }
+
+        $query = $this->db->prepare($statement);
+        $query->execute($ids);
+
+        if ($query->errorCode() !== "00000") {
+            return null;
+        }
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @throws PDOException
+     */
+    public function getBlockedIp(string $ip, string $username): ?array
+    {
+        $query = $this->db->prepare(
+            'SELECT ip, blocked_until, username 
+                    FROM blocked_ip 
+                    WHERE ip= ? AND username = ?;'
+        );
+        $query->execute([$ip, $username]);
+
+        if ($query->errorCode() !== "00000") {
+            return null;
+        }
+
+        return $query->fetchAll(PDO::FETCH_ASSOC)[0];
+    }
+
+    /**
+     * @throws PDOException
+     */
+    public function updateBlockedIpInfo(string $ip, string $username, int $blockedUntil, bool $inDatabase): bool
     {
         if ($inDatabase) {
-            $query = $this->db->prepare('UPDATE blocked_ip SET blocked_until = ? WHERE ip = ?;');
+            $query = $this->db->prepare('UPDATE blocked_ip SET blocked_until = ? WHERE ip = ? AND username = ?;');
         } else {
-            $query = $this->db->prepare('INSERT INTO blocked_ip(blocked_until, ip) VALUES (?, ?);');
+            $query = $this->db->prepare('INSERT INTO blocked_ip(blocked_until, ip, username) VALUES (?, ?, ?);');
         }
-        $query->execute([$blockedUntil, $ip]);
+        $query->execute([$blockedUntil, $ip, $username]);
 
         if ($query->errorCode() !== "00000") {
             return false;

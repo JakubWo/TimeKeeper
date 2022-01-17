@@ -4,13 +4,14 @@ default:
   /main: "src/View/main/main.php"
 
 api:
-  listener: "src/Listener/apiListener.php"
-  loginAction: "src/Service/ApiActions/loginAction.php"
-  logoutAction: "src/Service/ApiActions/logoutAction.php"
-  startAction: "src/Service/ApiActions/startAction.php"
-  breakAction: "src/Service/ApiActions/breakAction.php"
-  stopAction: "src/Service/ApiActions/stopAction.php"
-
+  controller: "src/API/ApiController.php"
+  loginAction: "src/API/ApiActions/Authorization/loginAction.php"
+  logoutAction: "src/API/ApiActions/Authorization/logoutAction.php"
+  startAction: "src/API/ApiActions/Console/startAction.php"
+  breakAction: "src/API/ApiActions/Console/breakAction.php"
+  stopAction: "src/API/ApiActions/Console/stopAction.php"
+  getWorkdaysAction: "src/API/ApiActions/Workday/getWorkdaysAction.php"
+  getWorkdayAction: "src/API/ApiActions/Workday/getWorkdayAction.php"
 
 config:
   parameters: "config/parameters.yaml"
@@ -26,10 +27,10 @@ js:
   session_timout: "assets/src/sessionTimeout.js"
 
 listener:
+  api: "src/Listener/apiListener.php"
   session_checker: "src/Listener/sessionLifespanListener.php"
 
 service:
-  api: "src/Service/ApiService.php"
   db: "src/Service/DatabaseService.php"
   error: "src/Service/ErrorService.php"
 
@@ -42,6 +43,9 @@ style:
 view:
   console: "src/View/main/console.html"
   head: "src/View/head.php"
+  table: "src/View/main/table.php"
+  row: "src/View/main/row.php"
+
 
 vendor:
   jquery: "vendor/jquery-3.6.0.min.js"

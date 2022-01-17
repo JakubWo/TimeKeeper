@@ -17,5 +17,8 @@
 
 <?php readfile($GLOBALS['routingService']->getRoute('view-console')) ?>
 
+<br><br><br>
+<?php include($GLOBALS['routingService']->getRoute('view-table')) ?>
+
 </body>
 </html>

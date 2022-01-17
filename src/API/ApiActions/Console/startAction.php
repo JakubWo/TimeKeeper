@@ -1,14 +1,14 @@
 <?php
 
-namespace src\Service\ApiActions;
+namespace src\API\ApiActions;
 
 use DateTime;
 use DateTimeZone;
 use Exception;
-use src\Service\ApiService\ApiService;
+use src\API\ApiController\ApiController;
 use src\Service\DatabaseService\DatabaseService;
 
-class startAction extends ApiService
+class startAction extends ApiController
 {
     /**
      * @throws Exception
@@ -26,8 +26,7 @@ class startAction extends ApiService
             return self::errorResponse('Cannot make another start event before ending last workday');
         } elseif ($lastEventType === 'break') {
             if ($dbService->stopBreakEvent($lastWorkdayId)) {
-                http_response_code(201);
-                return self::successResponse('Stop break');
+                return self::successPostResponse('Stop break', 200, []);
             } else {
                 return self::errorResponse('Action failed');
             }
@@ -57,7 +56,7 @@ class startAction extends ApiService
         } catch (Exception $exception) {
             return self::errorResponse($timezoneError);
         }
-
+        $userInputTimeInSeconds = strtotime($userInputTime) - strtotime('00:00');
 
         $note = [];
         $isWorkdayAccepted = 1;
@@ -65,13 +64,18 @@ class startAction extends ApiService
         if (!empty($userInputTime)) {
             $workdayType = self::IRREGULAR;
 
-            $note['CustomStart'] = strtotime($userInputTime) - strtotime('00:00');
+            $note['CustomStart'] = $userInputTimeInSeconds;
             if (!preg_match('/^\d{2}:\d{2}$/', $userInputTime)) {
                 return self::errorResponse('Invalid custom time format');
             }
 
-            $userInputTimeParts = explode(':', $userInputTime);
-            $dateTime->setTime($userInputTimeParts[0], $userInputTimeParts[1], '00');
+            $userInputTimeParts = self::secondsToTime($userInputTimeInSeconds);
+            $dateTime->setTime(
+                $userInputTimeParts['hours'],
+                $userInputTimeParts['minutes'],
+                $userInputTimeParts['seconds']
+            );
+
             $dateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
 
             $userInputTime = $dateTime->format('Y-m-d H:i:s');
@@ -105,9 +109,9 @@ class startAction extends ApiService
             return self::errorResponse('Action failed');
         }
 
-        http_response_code(201);
-        return self::successResponse(
+        return self::successPostResponse(
             'Start workday',
+            201,
             [
                 'start_time' => $userInputTime,
                 'workday_type' => $workdayType,

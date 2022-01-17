@@ -1,12 +1,12 @@
 <?php
 
-namespace src\Service\ApiActions;
+namespace src\API\ApiActions;
 
 use Exception;
-use src\Service\ApiService\ApiService;
+use src\API\ApiController\ApiController;
 use src\Service\DatabaseService\DatabaseService;
 
-class breakAction extends ApiService
+class breakAction extends ApiController
 {
     /**
      * @throws Exception
@@ -29,8 +29,7 @@ class breakAction extends ApiService
             return self::errorResponse('Action failed');
         }
 
-        http_response_code(201);
-        return self::successResponse('Start break');
+        return self::successPostResponse('Start break', 200, []);
     }
 
 }
