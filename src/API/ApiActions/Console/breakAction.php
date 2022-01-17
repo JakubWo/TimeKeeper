@@ -17,11 +17,16 @@ class breakAction extends ApiController
 
         $userId = $_SESSION['user_id'];
         $workdayId = $dbService->getWorkdays($userId, 1)[0]['workday_id'];
-        $lastEventType = $dbService->getWorkdayEvents($workdayId)[0]['event_type'];
+        if ($workdayId !== null) {
+            $lastEventType = $dbService->getWorkdayEvents($workdayId)[0]['event_type'];
+        } else {
+            $lastEventType = null;
+        }
+
 
         if ($lastEventType === 'break') {
             return self::errorResponse('Already on break');
-        } elseif ($lastEventType === 'stop') {
+        } elseif ($lastEventType === 'stop' || $lastEventType === null) {
             return self::errorResponse('Cannot take break before starting or after ending a workday');
         }
 

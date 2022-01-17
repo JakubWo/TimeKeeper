@@ -28,7 +28,6 @@ run();
 function run(): void
 {
     $requestURI = $_SERVER['REQUEST_URI'];
-
     try {
 
         if (!isset($_SESSION['user_id']) && $requestURI === '/api/login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -47,7 +46,6 @@ function run(): void
                 }
 
             } elseif ($_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'HEAD') {
-
                 switch (explode('?', $_SERVER['REQUEST_URI'])[0]) {
                     case '/api/getWorkdays':
                         $api_response = getWorkdaysAction::run();
@@ -77,7 +75,7 @@ function run(): void
             } else {
                 $api_response = ApiController::errorResponse('Unsupported http request method', 501);
             }
-            if (empty($api_response)) {
+            if ($api_response === null) {
                 $api_response = ApiController::errorResponse('Undefined action', 404);
             }
 
@@ -93,7 +91,6 @@ function run(): void
             $exception->getTrace(),
             true
         );
-
         $api_response = ApiController::errorResponse('Unexpected error', 500);
     }
 

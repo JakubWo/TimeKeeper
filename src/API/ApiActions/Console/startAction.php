@@ -20,15 +20,17 @@ class startAction extends ApiController
 
         $userId = $_SESSION['user_id'];
         $lastWorkdayId = $dbService->getWorkdays($userId, 1)[0]['workday_id'];
-        $lastEventType = $dbService->getWorkdayEvents($lastWorkdayId)[0]['event_type'];
+        if ($lastWorkdayId !== null) {
+            $lastEventType = $dbService->getWorkdayEvents($lastWorkdayId)[0]['event_type'];
 
-        if ($lastEventType === 'start') {
-            return self::errorResponse('Cannot make another start event before ending last workday');
-        } elseif ($lastEventType === 'break') {
-            if ($dbService->stopBreakEvent($lastWorkdayId)) {
-                return self::successPostResponse('Stop break', 200, []);
-            } else {
-                return self::errorResponse('Action failed');
+            if ($lastEventType === 'start') {
+                return self::errorResponse('Cannot make another start event before ending last workday');
+            } elseif ($lastEventType === 'break') {
+                if ($dbService->stopBreakEvent($lastWorkdayId)) {
+                    return self::successPostResponse('Stop break', 200, []);
+                } else {
+                    return self::errorResponse('Action failed');
+                }
             }
         }
 

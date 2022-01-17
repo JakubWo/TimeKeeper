@@ -20,10 +20,15 @@ class stopAction extends ApiController
         $userId = $_SESSION['user_id'];
         $currentWorkday = $dbService->getWorkdays($userId, 1)[0];
         $workdayId = $currentWorkday['workday_id'];
-        $lastWorkdayEvents = $dbService->getWorkdayEvents($workdayId);
+        if ($workdayId === null) {
+            $lastWorkdayEvents = null;
+        } else {
+            $lastWorkdayEvents = $dbService->getWorkdayEvents($workdayId);
+        }
+
 
         $times[] = $dateTime->format('Y-m-d H:i:s');
-        if ($lastWorkdayEvents[0]['event_type'] === 'stop') {
+        if ($lastWorkdayEvents === null || $lastWorkdayEvents[0]['event_type'] === 'stop') {
             return self::errorResponse('Cannot stop not started workday');
         }
 

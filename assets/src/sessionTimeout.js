@@ -6,7 +6,7 @@ function resetIdleTimeout() {
     idleTimeout = setTimeout(() => window.location.replace('/'), maxIdleTime)
 }
 
-$(document).on("ready", function () {
+$(function () {
     resetIdleTimeout();
 
     ['click', 'touchstart', 'mousemove'].forEach(event =>

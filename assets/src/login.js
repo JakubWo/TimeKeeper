@@ -1,7 +1,4 @@
 $(function () {
-    const error_alert_text = "Couldn't connect to API. Please try again.\n" +
-        "If error continues contact server admin.";
-
     const submit_button = $("#submit_button");
     const error_login = $("#error_login");
 
@@ -62,12 +59,10 @@ $(function () {
                     console.log(response);
                     if (response['response']['result'] === 'Success') {
                         window.location.replace('/');
-                    } else {
-                        error_login.text(response['response']['error']['title']);
                     }
                 },
-                error: function () {
-                    alert(error_alert_text);
+                error: function (error) {
+                    errorHandler(error);
                 }
             });
         }

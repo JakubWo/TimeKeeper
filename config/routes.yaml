@@ -25,6 +25,7 @@ js:
   login: "assets/src/login.js"
   main: "assets/src/main.js"
   session_timout: "assets/src/sessionTimeout.js"
+  utility: "assets/src/utility.js"
 
 listener:
   api: "src/Listener/apiListener.php"
@@ -45,7 +46,6 @@ view:
   head: "src/View/head.php"
   table: "src/View/main/table.php"
   row: "src/View/main/row.php"
-
 
 vendor:
   jquery: "vendor/jquery-3.6.0.min.js"

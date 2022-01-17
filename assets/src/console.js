@@ -1,7 +1,4 @@
 $(function () {
-    const error_alert_text = "Couldn't connect to API. Please try again.\n" +
-        "If error continues contact server admin.";
-
     const start_button = $("#start");
     const stop_button = $("#stop");
     const break_button = $("#break");
@@ -51,9 +48,27 @@ $(function () {
                 // stop_button.prop("disabled", false);
                 // break_button.prop("disabled", false);
             },
-            error: function () {
-                console.log(error_alert_text);
-                // alert(error_alert_text);
+            error: function (error) {
+                errorHandler(error);
+            }
+        });
+    });
+
+    /*
+        BREAK EVENT
+    */
+    break_button.on("click", function () {
+        $.ajax({
+            type: "PATCH",
+            dataType: "json",
+            url: "/api/break",
+            success: function (response) {
+                console.log(response);
+                // start_button.prop("disabled", false);
+                // break_button.prop("disabled", true);
+            },
+            error: function (error) {
+                errorHandler(error);
             }
         });
     });
@@ -63,7 +78,7 @@ $(function () {
      */
     stop_button.on("click", function () {
         $.ajax({
-            type: "POST",
+            type: "PATCH",
             dataType: "json",
             url: "/api/stop",
             success: function (response) {
@@ -72,30 +87,11 @@ $(function () {
                 // stop_button.prop("disabled", true);
                 // break_button.prop("disabled", true);
             },
-            error: function () {
-                console.log(error_alert_text);
-                // alert(error_alert_text);
+            error: function (error) {
+                errorHandler(error);
             }
         });
     });
 
-    /*
-        BREAK EVENT
-     */
-    break_button.on("click", function () {
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            url: "/api/break",
-            success: function (response) {
-                console.log(response);
-                // start_button.prop("disabled", false);
-                // break_button.prop("disabled", true);
-            },
-            error: function () {
-                console.log(error_alert_text);
-                // alert(error_alert_text);
-            }
-        });
-    });
+
 });
