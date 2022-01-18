@@ -8,7 +8,7 @@ if (isset($_COOKIE['error'])) {
 <html lang="en">
 
 <head>
-    <?php require($GLOBALS['routingService']->getRoute('view-head')) ?>
+    <?php require_once($GLOBALS['routingService']->getRoute('view-head')) ?>
     <title><?= $error['title'] ?? 'Unknown error' ?></title>
     <link rel="stylesheet" href="<?= $GLOBALS['routingService']->getRoute('style-error') ?>">
     <script src="<?= $GLOBALS['routingService']->getRoute('js-error') ?>"></script>

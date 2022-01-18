@@ -34,6 +34,7 @@ listener:
 service:
   db: "src/Service/DatabaseService.php"
   error: "src/Service/ErrorService.php"
+  api: "src/Service/ApiService.php"
 
 style:
   console: "assets/Style/console.css"
@@ -44,8 +45,8 @@ style:
 view:
   console: "src/View/main/console.html"
   head: "src/View/head.php"
-  table: "src/View/main/table.php"
-  row: "src/View/main/row.php"
+  workday: "src/View/main/workday.php"
+  event: "src/View/main/event.php"
 
 vendor:
   jquery: "vendor/jquery-3.6.0.min.js"

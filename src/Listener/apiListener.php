@@ -1,27 +1,14 @@
 <?php
 
-include($GLOBALS['routingService']->getRoute('service-db'));
-include($GLOBALS['routingService']->getRoute('service-error'));
-
-include($GLOBALS['routingService']->getRoute('api-controller'));
-
-include($GLOBALS['routingService']->getRoute('api-loginAction'));
-include($GLOBALS['routingService']->getRoute('api-logoutAction'));
-include($GLOBALS['routingService']->getRoute('api-startAction'));
-include($GLOBALS['routingService']->getRoute('api-breakAction'));
-include($GLOBALS['routingService']->getRoute('api-stopAction'));
-include($GLOBALS['routingService']->getRoute('api-getWorkdaysAction'));
-include($GLOBALS['routingService']->getRoute('api-getWorkdayAction'));
-
 use src\API\ApiActions\getWorkdayAction;
 use src\API\ApiActions\getWorkdaysAction;
 use src\API\ApiController\ApiController;
-use src\Service\ErrorService\ErrorService;
 use src\API\ApiActions\loginAction;
 use src\API\ApiActions\logoutAction;
 use src\API\ApiActions\startAction;
 use src\API\ApiActions\breakAction;
 use src\API\ApiActions\stopAction;
+use src\Service\ErrorService\ErrorService;
 
 run();
 

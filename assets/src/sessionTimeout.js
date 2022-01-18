@@ -1,6 +1,7 @@
 const maxIdleTime = 1800000;
 let idleTimeout;
 
+// TODO: refresh session on activity!
 function resetIdleTimeout() {
     if (idleTimeout) clearTimeout(idleTimeout);
     idleTimeout = setTimeout(() => window.location.replace('/'), maxIdleTime)

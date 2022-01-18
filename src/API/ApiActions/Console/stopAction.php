@@ -79,7 +79,9 @@ class stopAction extends ApiController
             $isWorkdayAccepted = 0;
         }
 
-        $note = array_merge(self::notesToArray($currentWorkday['notes']), $note);
+        if (!empty($currentWorkday['notes'])) {
+            $note = array_merge(self::notesToArray($currentWorkday['notes']), $note);
+        }
 
         if (!$dbService->stopEvent([
             $userId,

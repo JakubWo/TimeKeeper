@@ -1,0 +1,26 @@
+/*TODO: Cover whole css ofc - these settings are temp just for dev*/
+
+table, td, th {
+    border-collapse: collapse;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+}
+
+td, th {
+    text-align: center;
+    width: 150px;
+}
+
+th:nth-child(4), td:nth-child(4) {
+    width: 300px;
+}
+
+details > summary {
+    list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+    display: none;
+}

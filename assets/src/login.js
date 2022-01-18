@@ -3,6 +3,7 @@ $(function () {
     const error_login = $("#error_login");
 
 
+    // TODO: Login button with dynamic timer + noscript functionality or disclaimer.
     // <noscript>html code for no js in here</noscript>
     // Add block timer on button!
 

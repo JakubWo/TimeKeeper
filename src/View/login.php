@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <?php require($GLOBALS['routingService']->getRoute('view-head')) ?>
+    <?php require_once($GLOBALS['routingService']->getRoute('view-head')) ?>
     <title>Login</title>
     <link rel="stylesheet" href="<?= $GLOBALS['routingService']->getRoute('style-login') ?>">
     <script src="<?= $GLOBALS['routingService']->getRoute('js-login') ?>"></script>
