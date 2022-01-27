@@ -1,5 +1,6 @@
 <?php
 
+use src\API\ApiActions\getEventsAction;
 use src\API\ApiActions\getWorkdayAction;
 use src\API\ApiActions\getWorkdaysAction;
 use src\API\ApiController\ApiController;
@@ -16,7 +17,7 @@ function run(): void
 {
     $requestURI = $_SERVER['REQUEST_URI'];
     try {
-
+        $api_response = null;
         if (!isset($_SESSION['user_id']) && $requestURI === '/api/login' && $_SERVER['REQUEST_METHOD'] === 'POST') {
             $api_response = loginAction::run();
 
@@ -39,6 +40,9 @@ function run(): void
                         break;
                     case '/api/getWorkday':
                         $api_response = getWorkdayAction::run();
+                        break;
+                    case '/api/getEvents':
+                        $api_response = getEventsAction::run();
                         break;
                 }
 

@@ -1,20 +1,70 @@
-/*TODO: Cover whole css ofc - these settings are temp just for dev*/
-
-table, td, th {
-    border-collapse: collapse;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
-    border-top: 1px solid black;
-}
-
-td, th {
+body {
+    background-color: #dcd9d1;
+    /*background-color: #000000;*/
+    margin: 0 auto;
     text-align: center;
-    width: 150px;
+    width: 1000px;
+    font-family: "Liberation Serif", serif;
 }
 
-th:nth-child(4), td:nth-child(4) {
+.box {
+    display: flex;
+    margin: 25px 0 50px 0;
+}
+
+.console {
+    flex: 1 1 auto;
+    text-align: left;
+}
+
+.management-panel {
+    flex: 1 1 auto;
+}
+
+.user_panel {
+    flex: 1 1 auto;
+    text-align: right;
+}
+
+.workday {
+    border: 3px solid rgba(100, 72, 37, 0.17);
+    margin-bottom: 10px;
+}
+
+.workday table {
+    text-align: center;
+}
+
+.row0 {
+    background-color: rgba(255, 236, 200, 0.44);
+}
+
+.row1 {
+    background-color: whitesmoke;
+}
+
+.headers {
+    background-color: rgba(100, 72, 37, 0.17);
+}
+
+.workday td, .workday th {
+    width: 160px;
+}
+
+.workday th:nth-child(4), .workday td:nth-child(4) {
     width: 300px;
+}
+
+.workday td:nth-child(5), .workday td:nth-child(6) {
+    width: 110px;
+}
+
+.workday .is_accepted {
+    width: 220px !important;
+}
+
+.workday th:nth-child(5) {
+    width: 220px;
 }
 
 details > summary {
@@ -23,4 +73,93 @@ details > summary {
 
 details > summary::-webkit-details-marker {
     display: none;
+}
+
+#logout, .console_b {
+    font-family: "Liberation Serif", serif;
+    width: max-content;
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+
+    font-size: 20px;
+}
+
+#acceptation_button {
+    font-family: "Liberation Serif", serif;
+}
+
+/* Tooltip */
+.tooltip {
+    position: relative;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: max-content;
+    /*width: 300px;*/
+    bottom: 100%;
+    background-color: #6e6e6e;
+    color: #fff;
+    text-align: center;
+    font-size: 15px;
+    padding: 2px 5px 2px 5px;
+    border-radius: 6px;
+    border: 2px solid black;
+    left: 50%;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.load_more {
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+.load_more {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.load_more a {
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.load_more a:hover .bottom {
+    border: 0.5em solid grey;
+}
+
+.load_more a:hover .bottom:after {
+    border-top: 0.5em solid grey;
+    border-right: 0.5em solid grey;
+}
+
+.bottom {
+    display: inline-block;
+    width: 4em;
+    height: 4em;
+    border: 0.5em solid rgba(100, 72, 37, 0.17);
+    border-radius: 50%;
+    margin-left: 0.75em;
+}
+
+.bottom:after {
+    content: '';
+    display: inline-block;
+    margin-top: 0.6em;
+    width: 1.4em;
+    height: 1.4em;
+    border-top: 0.5em solid rgba(100, 72, 37, 0.17);
+    border-right: 0.5em solid rgba(100, 72, 37, 0.17);
+    -moz-transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+    transform: rotate(135deg);
 }

@@ -146,7 +146,7 @@ class DatabaseService
     /**
      * @throws PDOException
      */
-    public function getWorkdays(int $userId, int $n = null): ?array
+    public function getWorkdays(int $userId, int $n = null, int $from = null): ?array
     {
         if ($n === null) {
             $query = $this->db->prepare(
@@ -157,8 +157,8 @@ class DatabaseService
             );
             $query->execute([$userId]);
         } else {
-            $query = $this->db->prepare('CALL get_workdays(?, ?);');
-            $query->execute([$userId, $n]);
+            $query = $this->db->prepare('CALL get_workdays(?, ?, ?);');
+            $query->execute([$userId, $n, $from]);
         }
 
         if ($query->errorCode() !== "00000") {

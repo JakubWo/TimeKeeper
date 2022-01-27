@@ -44,9 +44,15 @@ $(function () {
             url: "/api/start",
             success: function (response) {
                 console.log(response);
-                // start_button.prop("disabled", true);
-                // stop_button.prop("disabled", false);
-                // break_button.prop("disabled", false);
+                if (response['response']['action'] === "Stop break") {
+                    loadWorkdays('update');
+                } else {
+                    loadWorkdays('start');
+                }
+
+                start_button.prop("disabled", true);
+                stop_button.prop("disabled", false);
+                break_button.prop("disabled", false);
             },
             error: function (error) {
                 errorHandler(error);
@@ -64,8 +70,9 @@ $(function () {
             url: "/api/break",
             success: function (response) {
                 console.log(response);
-                // start_button.prop("disabled", false);
-                // break_button.prop("disabled", true);
+                // loadWorkdays(1, 'update'); ???
+                start_button.prop("disabled", false);
+                break_button.prop("disabled", true);
             },
             error: function (error) {
                 errorHandler(error);
@@ -83,9 +90,10 @@ $(function () {
             url: "/api/stop",
             success: function (response) {
                 console.log(response);
-                // start_button.prop("disabled", false);
-                // stop_button.prop("disabled", true);
-                // break_button.prop("disabled", true);
+                loadWorkdays('update');
+                start_button.prop("disabled", false);
+                stop_button.prop("disabled", true);
+                break_button.prop("disabled", true);
             },
             error: function (error) {
                 errorHandler(error);

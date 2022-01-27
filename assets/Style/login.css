@@ -1,11 +1,11 @@
-body{
-    background-color: white;
+body {
+    background-color: rgb(220, 217, 209);
 
     font-family: "Liberation Serif", serif;
     font-size: 19px;
 }
 
-div{
+#from_background {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -21,28 +21,28 @@ div{
 
     transform: translate(-50%, -70%);
 
-    background-color: #afacac;
+    background-color: rgba(100, 72, 37, 0.17);
     border-radius: 5%;
-    -webkit-box-shadow: 0 0 10px 10px #afacac;
+    -webkit-box-shadow: 0 0 5px 5px rgba(100, 72, 37, 0.17);
 }
 
-form{
+#login_form {
     position: absolute;
 
     min-width: 100%;
     min-height: 100%;
 
-    background-color: #afacac;
+    background-color: rgba(100, 72, 37, 0.17);
     border-radius: 5%;
-    -webkit-box-shadow: 0 0 5px 5px #afacac;
+    -webkit-box-shadow: 0 0 2px 2px rgba(100, 72, 37, 0.17);
 }
 
-input, button{
+.login_input, #submit_button {
     width: 90%;
 
     min-height: 1.5rem;
 
-    border: solid 1px grey;
+    border: solid 1px rgb(0, 0, 0);
     border-radius: 5px;
 
     margin: 1% 5% 2% 5%;
@@ -50,7 +50,7 @@ input, button{
     font-size: 15px;
 }
 
-button{
+#submit_button {
     position: absolute;
 
     width: 20%;
@@ -60,11 +60,7 @@ button{
     font-size: 18px;
 }
 
-button:hover{
-    background-color: #73e8e8;
-}
-
-form p{
+form p {
     margin: 8% 0 0 5%;
 }
 
@@ -76,7 +72,7 @@ form p{
     color: #d90000;
 }
 
-a{
+a {
     font-size: 16px;
 }
 

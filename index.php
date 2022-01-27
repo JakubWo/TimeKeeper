@@ -9,6 +9,11 @@ require($GLOBALS['routingService']->getRoute('listener-session_checker'));
 if (strpos($_SERVER['REQUEST_URI'], '/api/') === 0) {
     require_once('src/__autoloadAPI.php');
     require_once($GLOBALS['routingService']->getRoute('listener-api'));
+
+} else if (strpos($_SERVER['REQUEST_URI'], '/view/') === 0) {
+    require_once($GLOBALS['routingService']->getRoute('service-view'));
+    require_once($GLOBALS['routingService']->getRoute('listener-view'));
+
 } else {
     if ($_SERVER['REQUEST_URI'] === '/' || $_SERVER['REQUEST_URI'] == '/main' || $_SERVER['REQUEST_URI'] == '/login') {
         if (isset($_SESSION['user_id'])) {

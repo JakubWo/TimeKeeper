@@ -4,6 +4,14 @@ namespace src\API\ApiController;
 
 class ApiController
 {
+    protected const TIMESTAMP_NOTES = [
+        'CustomStart',
+        'CustomStartTimeOff',
+        'LongBreak',
+        'OverWork',
+        'UnderHours'
+    ];
+
     protected const REGULAR = 1;
     protected const IRREGULAR = 2;
 
@@ -35,11 +43,33 @@ class ApiController
     protected static function notesToArray(string $notes): array
     {
         $notes_array = [];
-        foreach (explode(';', rtrim($notes, '; ')) as $note) {
-            $note_parts = explode(':', $note);
-            $notes_array[$note_parts[0]] = $note_parts[1];
+        if (!empty($notes)) {
+            foreach (explode(';', rtrim($notes, '; ')) as $note) {
+                $note_parts = explode(':', $note);
+
+                if (in_array($note_parts[0], self::TIMESTAMP_NOTES)) {
+                    $time = self::secondsToTime($note_parts[1]);
+
+                    $note_parts[1] = sprintf(
+                        '%02d:%02d:%02d',
+                        $time['hours'],
+                        $time['minutes'],
+                        $time['seconds']
+                    );
+                }
+                $notes_array[$note_parts[0]] = $note_parts[1];
+            }
         }
         return $notes_array;
+    }
+
+    protected static function reformatEvents(array $events): array
+    {
+        $reformattedEvents = null;
+        foreach ($events as $event) {
+            $reformattedEvents[$event['event_timestamp']] = $event['event_type'];
+        }
+        return $reformattedEvents;
     }
 
     public static function errorResponse(string $title, int $code = 400): array

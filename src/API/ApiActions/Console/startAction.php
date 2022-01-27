@@ -96,17 +96,19 @@ class startAction extends ApiController
             $userInputTime = $userTime;
         }
 
+
         if (!empty($userInputTimeZone) && $userInputTimeZone !== $userDbTimeZone) {
             $note['DifferentTimezone'] = $userInputTimeZone;
             $workdayType = self::IRREGULAR;
         }
+
 
         if (!$dbService->startEvent([
             $userId,
             $userInputTime,
             $workdayType,
             $isWorkdayAccepted,
-            self::notesToString($note)
+            !empty($note) ? self::notesToString($note) : ''
         ])) {
             return self::errorResponse('Action failed');
         }

@@ -9,17 +9,17 @@
 </head>
 
 <body>
-<div>
+<div id="from_background">
     <form id="login_form" method="post" autocomplete="off">
         <p>Email:</p>
         <label>
-            <input type="email" id="email_input" value="admin@mail.pl" name="email">
+            <input type="email" class="login_input" id="email_input" value="admin@mail.pl" name="email">
         </label>
         <p id="error_email"></p>
 
         <p>Password:</p>
         <label>
-            <input type="password" id="password_input" value="admin" name="password">
+            <input type="password" class="login_input" id="password_input" value="admin" name="password">
         </label>
         <p id="error_password"></p>
 
@@ -37,7 +37,6 @@
 
 </footer>
 
-<!-- CSS breaks it -->
 <script type="text/javascript" id="cookieinfo"
         src="//cookieinfoscript.com/js/cookieinfo.min.js"
         data-bg="#645862"

@@ -8,3 +8,4 @@ include_once($GLOBALS['routingService']->getRoute('api-stopAction'));
 include_once($GLOBALS['routingService']->getRoute('api-breakAction'));
 include_once($GLOBALS['routingService']->getRoute('api-getWorkdaysAction'));
 include_once($GLOBALS['routingService']->getRoute('api-getWorkdayAction'));
+include_once($GLOBALS['routingService']->getRoute('api-getEventsAction'));

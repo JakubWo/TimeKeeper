@@ -12,6 +12,7 @@ api:
   stopAction: "src/API/ApiActions/Console/stopAction.php"
   getWorkdaysAction: "src/API/ApiActions/Workday/getWorkdaysAction.php"
   getWorkdayAction: "src/API/ApiActions/Workday/getWorkdayAction.php"
+  getEventsAction: "src/API/ApiActions/Event/getEventsAction.php"
 
 config:
   parameters: "config/parameters.yaml"
@@ -30,11 +31,13 @@ js:
 listener:
   api: "src/Listener/apiListener.php"
   session_checker: "src/Listener/sessionLifespanListener.php"
+  view: "src/Listener/viewListener.php"
 
 service:
   db: "src/Service/DatabaseService.php"
   error: "src/Service/ErrorService.php"
   api: "src/Service/ApiService.php"
+  view: "src/Service/ViewGeneratorService.php"
 
 style:
   console: "assets/Style/console.css"
@@ -45,8 +48,6 @@ style:
 view:
   console: "src/View/main/console.html"
   head: "src/View/head.php"
-  workday: "src/View/main/workday.php"
-  event: "src/View/main/event.php"
 
 vendor:
   jquery: "vendor/jquery-3.6.0.min.js"
