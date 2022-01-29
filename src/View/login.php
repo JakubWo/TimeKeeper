@@ -39,9 +39,11 @@
 
 <script type="text/javascript" id="cookieinfo"
         src="//cookieinfoscript.com/js/cookieinfo.min.js"
-        data-bg="#645862"
+        data-bg="#8a8a8a"
         data-fg="#FFFFFF"
-        data-link="#F1D600"
+        data-link="#654b73"
+        data-divlinkbg="#654b73"
+        data-divlink="#FFFFFF"
         data-cookie="CookieInfoScript"
         data-text-align="left"
         data-close-text="Got it!">

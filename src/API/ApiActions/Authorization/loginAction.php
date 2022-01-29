@@ -46,8 +46,25 @@ class loginAction extends ApiController
             return self::errorResponse('Email and/or password is incorrect');
         }
 
+        $basicData = $dbService->getBasicUserData($userId);
+        $teamPermissions = $dbService->getTeamsPermissions($userId);
+        if (empty($teamPermissions) && $basicData['is_admin'] === false) {
+            return self::errorResponse('Not a member of any team, please contact Administrator');
+        }
+
+        $_SESSION['user']['privileges'] = false;
+        foreach ($teamPermissions as $permission) {
+            if ($permission['permission'] !== 'member') {
+                $_SESSION['user']['privileges'] = true;
+                break;
+            }
+        }
+
         $_SESSION['user_id'] = $userId;
-        $_SESSION['username'] = explode('@', $email)[0];
+        $_SESSION['user']['timezone'] = $basicData['time_zone'];
+        $_SESSION['user']['balance'] = $basicData['balance'];
+        $_SESSION['user']['username'] = explode('@', $email)[0];
+
         session_regenerate_id(true);
         return self::successPostResponse('Logged in');
     }

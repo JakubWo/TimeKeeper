@@ -37,7 +37,7 @@ class startAction extends ApiController
         $userInputTimeZone = $_POST['time_zone'];
         $userInputTime = $_POST['time_input'];
 
-        $userDbTimeZone = $dbService->getUserTimeZone($userId);
+        $userDbTimeZone = $_SESSION['user']['timezone'];
         $userTime = $dateTime->format('Y-m-d H:i:s');
 
         try {

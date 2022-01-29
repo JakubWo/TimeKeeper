@@ -2,17 +2,7 @@ $(function () {
     const submit_button = $("#submit_button");
     const error_login = $("#error_login");
 
-
     // TODO: Login button with dynamic timer + noscript functionality or disclaimer.
-    // <noscript>html code for no js in here</noscript>
-    // Add block timer on button!
-
-    // if (error_login.innerText !== '') {
-    //     submit_button.disabled = true;
-    //     setTimeout(function () {
-    //         submit_button.disabled = false;
-    //     }, 20000)
-    // }
 
     $(document).on("keydown", function (event) {
         if (event.key === "Enter") {
@@ -57,13 +47,14 @@ $(function () {
                 dataType: "json",
                 url: "/api/login",
                 success: function (response) {
-                    console.log(response);
                     if (response['response']['result'] === 'Success') {
                         window.location.replace('/');
                     }
                 },
                 error: function (error) {
-                    errorHandler(error);
+                    let errorText = JSON.parse(error.responseText);
+                    let errorTitle = errorText["response"]["error"]["title"];
+                    alert(errorTitle);
                 }
             });
         }

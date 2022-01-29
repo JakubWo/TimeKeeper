@@ -67,7 +67,7 @@ class ApiController
     {
         $reformattedEvents = null;
         foreach ($events as $event) {
-            $reformattedEvents[$event['event_timestamp']] = $event['event_type'];
+            $reformattedEvents[$event['event_timestamp']][] = $event['event_type'];
         }
         return $reformattedEvents;
     }

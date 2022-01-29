@@ -7,9 +7,15 @@ body {
     font-family: "Liberation Serif", serif;
 }
 
+img {
+    padding-top: 5px;
+    width: 20px;
+    height: auto;
+}
+
 .box {
     display: flex;
-    margin: 25px 0 50px 0;
+    margin: 25px 0 25px 0;
 }
 
 .console {
@@ -17,13 +23,32 @@ body {
     text-align: left;
 }
 
-.management-panel {
+#custom_time_input:invalid {
+    border: 2px solid #d3002a;
+    background-color: rgb(238, 64, 64);
+}
+
+.information_panel {
     flex: 1 1 auto;
 }
 
 .user_panel {
     flex: 1 1 auto;
     text-align: right;
+}
+
+.user_panel_info {
+    float: right;
+    text-align: right;
+}
+
+.user_panel p {
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.user_selection {
+    text-align: center;
 }
 
 .workday {
@@ -48,23 +73,41 @@ body {
 }
 
 .workday td, .workday th {
-    width: 160px;
+    width: 150px;
 }
 
-.workday th:nth-child(4), .workday td:nth-child(4) {
+.workday td:first-child, .workday th:first-child {
+    width: 100px !important;
+}
+
+.workday th:nth-child(5), .workday td:nth-child(5) {
     width: 300px;
 }
 
-.workday td:nth-child(5), .workday td:nth-child(6) {
-    width: 110px;
+.workday td:nth-child(6), .workday td:nth-child(7) {
+    width: 75px;
 }
 
 .workday .is_accepted {
-    width: 220px !important;
+    width: 150px !important;
 }
 
-.workday th:nth-child(5) {
-    width: 220px;
+.workday th:nth-child(6) {
+    width: 150px;
+}
+
+.event_table {
+    background-color: rgba(100, 72, 37, 0.17);
+    border-collapse: collapse !important;
+}
+
+.event_table td, .event_table th {
+    border: 3px solid rgba(100, 72, 37, 0.17);
+}
+
+.event_table td:first-child, .event_table th:first-child {
+    width: 150px !important;
+    border-left: 0;
 }
 
 details > summary {
@@ -84,7 +127,7 @@ details > summary::-webkit-details-marker {
     font-size: 20px;
 }
 
-#acceptation_button {
+.acceptation_button {
     font-family: "Liberation Serif", serif;
 }
 
@@ -124,7 +167,6 @@ details > summary::-webkit-details-marker {
 }
 
 .load_more {
-    display: inline-block;
     vertical-align: middle;
 }
 

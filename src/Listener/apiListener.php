@@ -1,5 +1,6 @@
 <?php
 
+use src\API\ApiActions\acceptWorkdayAction;
 use src\API\ApiActions\getEventsAction;
 use src\API\ApiActions\getWorkdayAction;
 use src\API\ApiActions\getWorkdaysAction;
@@ -26,10 +27,13 @@ function run(): void
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 switch ($requestURI) {
                     case '/api/login':
-                        $api_response = ApiController::errorResponse('Already logged in as ' . $_SESSION['username']);
+                        $api_response = ApiController::errorResponse('Already logged in as ' . $_SESSION['user']['username']);
                         break;
                     case '/api/start':
                         $api_response = startAction::run();
+                        break;
+                    case '/api/acceptWorkday':
+                        $api_response = acceptWorkdayAction::run();
                         break;
                 }
 

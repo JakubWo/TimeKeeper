@@ -13,12 +13,15 @@ api:
   getWorkdaysAction: "src/API/ApiActions/Workday/getWorkdaysAction.php"
   getWorkdayAction: "src/API/ApiActions/Workday/getWorkdayAction.php"
   getEventsAction: "src/API/ApiActions/Event/getEventsAction.php"
+  acceptWorkdayAction: "src/API/ApiActions/Management/acceptWorkdayAction.php"
 
 config:
   parameters: "config/parameters.yaml"
 
 image:
   favicon: "assets/Image/TimeKeeper.png"
+  notAccepted: "assets/Image/notAccepted.png"
+  accepted: "assets/Image/accepted.png"
 
 js:
   console: "assets/src/console.js"
@@ -26,7 +29,6 @@ js:
   login: "assets/src/login.js"
   main: "assets/src/main.js"
   session_timout: "assets/src/sessionTimeout.js"
-  utility: "assets/src/utility.js"
 
 listener:
   api: "src/Listener/apiListener.php"
@@ -40,7 +42,6 @@ service:
   view: "src/Service/ViewGeneratorService.php"
 
 style:
-  console: "assets/Style/console.css"
   error: "assets/Style/error.css"
   login: "assets/Style/login.css"
   main: "assets/Style/main.css"
@@ -48,6 +49,7 @@ style:
 view:
   console: "src/View/main/console.html"
   head: "src/View/head.php"
+  userPanel: "src/View/main/userPanel.php"
 
 vendor:
   jquery: "vendor/jquery-3.6.0.min.js"

@@ -4,14 +4,13 @@ $(function () {
     const break_button = $("#break");
 
     const custom_time_checkbox = $("#custom_time_checkbox");
+
     let custom_time_input = $("#custom_time_input");
     custom_time_checkbox.prop("checked", false);
     custom_time_input.prop("disabled", true);
 
     if (start_button.is(":disabled") && stop_button.is(":disabled") && break_button.is(":disabled")) {
         start_button.prop("disabled", false);
-        stop_button.prop("disabled", false);
-        break_button.prop("disabled", false);
     }
 
     custom_time_checkbox.on("change", function () {
@@ -43,21 +42,26 @@ $(function () {
             dataType: "json",
             url: "/api/start",
             success: function (response) {
-                console.log(response);
-                if (response['response']['action'] === "Stop break") {
-                    loadWorkdays('update');
-                } else {
+                if (response['response']['action'] === "Start workday") {
                     loadWorkdays('start');
                 }
-
-                start_button.prop("disabled", true);
-                stop_button.prop("disabled", false);
-                break_button.prop("disabled", false);
+                switch_buttons();
             },
             error: function (error) {
-                errorHandler(error);
+                let errorText = JSON.parse(error.responseText);
+                let errorTitle = errorText["response"]["error"]["title"];
+                if (errorTitle === "Cannot make another start event before ending last workday") {
+                    switch_buttons();
+                }
+                alert(errorTitle);
             }
         });
+
+        function switch_buttons() {
+            start_button.prop("disabled", true);
+            stop_button.prop("disabled", false);
+            break_button.prop("disabled", false);
+        }
     });
 
     /*
@@ -68,16 +72,20 @@ $(function () {
             type: "PATCH",
             dataType: "json",
             url: "/api/break",
-            success: function (response) {
-                console.log(response);
-                // loadWorkdays(1, 'update'); ???
-                start_button.prop("disabled", false);
-                break_button.prop("disabled", true);
+            success: function () {
+                switch_buttons();
             },
             error: function (error) {
-                errorHandler(error);
+                let errorText = JSON.parse(error.responseText);
+                let errorTitle = errorText["response"]["error"]["title"];
+                alert(errorTitle);
             }
         });
+
+        function switch_buttons() {
+            start_button.prop("disabled", false);
+            break_button.prop("disabled", true);
+        }
     });
 
     /*
@@ -88,18 +96,21 @@ $(function () {
             type: "PATCH",
             dataType: "json",
             url: "/api/stop",
-            success: function (response) {
-                console.log(response);
+            success: function () {
                 loadWorkdays('update');
-                start_button.prop("disabled", false);
-                stop_button.prop("disabled", true);
-                break_button.prop("disabled", true);
+                switch_buttons();
             },
             error: function (error) {
-                errorHandler(error);
+                let errorText = JSON.parse(error.responseText);
+                let errorTitle = errorText["response"]["error"]["title"];
+                alert(errorTitle);
             }
         });
+
+        function switch_buttons() {
+            start_button.prop("disabled", false);
+            stop_button.prop("disabled", true);
+            break_button.prop("disabled", true);
+        }
     });
-
-
 });

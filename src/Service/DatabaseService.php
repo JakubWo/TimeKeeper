@@ -50,6 +50,112 @@ class DatabaseService
         return $query->fetchColumn();
     }
 
+    public function getBasicUserData(int $userId)
+    {
+        $query = $this->db->prepare('SELECT balance, is_admin, time_zone FROM tk_user WHERE user_id = ?;');
+        $query->execute([$userId]);
+
+        if ($query->errorCode() !== "00000") {
+            return null;
+        }
+
+        return $query->fetchAll(PDO::FETCH_ASSOC)[0];
+    }
+
+    /**
+     * @throws PDOException
+     */
+    public function getTeamsPermissions(int $userId): ?array
+    {
+        $query = $this->db->prepare(
+            'SELECT t.team_name, permission 
+                FROM team_permissions 
+                LEFT JOIN team t USING (team_id) 
+                WHERE user_id = ?;'
+        );
+
+        $query->execute([$userId]);
+
+        if ($query->errorCode() !== "00000") {
+            return null;
+        }
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getTeamByMemberUsername(string $username): ?array
+    {
+        $query = $this->db->prepare(
+            'SELECT t.team_name, permission 
+                FROM team_permissions 
+                LEFT JOIN team t USING (team_id) 
+                LEFT JOIN tk_user USING (user_id) 
+                WHERE username = ? AND (permission = 1 OR permission = 2);'
+        );
+
+        $query->execute([$username]);
+
+        if ($query->errorCode() !== '00000') {
+            return null;
+        }
+
+        return $query->fetchAll(PDO::FETCH_ASSOC)[0];
+    }
+
+    public function getTeamByMemberId(int $userId): ?array
+    {
+        $query = $this->db->prepare(
+            'SELECT t.team_name, permission 
+                FROM team_permissions 
+                LEFT JOIN team t USING (team_id) 
+                WHERE user_id = ? AND (permission = 1 OR permission = 2);'
+        );
+
+        $query->execute([$userId]);
+
+        if ($query->errorCode() !== '00000') {
+            return null;
+        }
+
+        return $query->fetchAll(PDO::FETCH_ASSOC)[0];
+    }
+
+
+    public function getMembersOfTeam(string $teamName): ?array
+    {
+        $query = $this->db->prepare(
+            'SELECT username 
+                    FROM tk_user 
+                    RIGHT JOIN team_permissions tp USING (user_id) 
+                    LEFT JOIN team t USING (team_id) 
+                    WHERE t.team_name = ? AND (tp.permission = 1 OR tp.permission = 2);'
+        );
+
+        $query->execute([$teamName]);
+
+        if ($query->errorCode() !== '00000') {
+            return null;
+        }
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    /**
+     * @throws PDOException
+     */
+    public function getOtherId(string $username): ?string
+    {
+        $query = $this->db->prepare('SELECT user_id FROM tk_user WHERE username=?;');
+        $query->execute([$username]);
+
+        if ($query->errorCode() !== "00000") {
+            return null;
+        }
+        return $query->fetchColumn();
+    }
+
+
     /**
      * @throws PDOException
      */
@@ -105,6 +211,21 @@ class DatabaseService
         }
         return true;
     }
+
+    /**
+     * @throws PDOException
+     */
+    public function acceptWorkday(int $workdayId): bool
+    {
+        $query = $this->db->prepare('CALL accept_workday(?);');
+        $query->execute([$workdayId]);
+
+        if ($query->errorCode() !== "00000") {
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * @throws PDOException

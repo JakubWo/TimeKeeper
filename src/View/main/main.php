@@ -13,8 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 
     <link rel="stylesheet" href="<?= $GLOBALS['routingService']->getRoute('style-main') ?>">
     <script src="<?= $GLOBALS['routingService']->getRoute('js-main') ?>"></script>
-
-    <link rel="stylesheet" href="<?= $GLOBALS['routingService']->getRoute('style-console') ?>">
+    
     <script src="<?= $GLOBALS['routingService']->getRoute('js-console') ?>"></script>
 </head>
 
@@ -24,12 +23,12 @@ if (!isset($_SESSION['user_id'])) {
     <div class="console">
         <?php readfile($GLOBALS['routingService']->getRoute('view-console')) ?>
     </div>
-    <div class="management-panel">
-
+    <div class="information_panel">
+        <p class="status"></p>
     </div>
     <div class="user_panel">
         <button type="button" id="logout">log out</button>
-        <br>
+        <p><?php require_once($GLOBALS['routingService']->getRoute('view-userPanel')); ?></p>
     </div>
 </div>
 
@@ -38,8 +37,10 @@ if (!isset($_SESSION['user_id'])) {
         <tr>
             <th class="tooltip"><span class="tooltiptext"></span>id</th>
             <th class="tooltip"><span class="tooltiptext"></span>date</th>
+            <th class="tooltip"><span class="tooltiptext"></span>work time</th>
             <th class="tooltip">
-                <span class="tooltiptext">Type of the workday,<br>Possible values:<br>IRREGULAR<br>REGULAR</span>type
+                <span class="tooltiptext">Type of the workday,<br>Possible values:<br>IRREGULAR<br>REGULAR</span>
+                type
             </th>
             <th class="tooltip"><span class="tooltiptext"></span>notes</th>
             <th class="tooltip"><span class="tooltiptext"></span>is_accepted</th>
@@ -47,7 +48,7 @@ if (!isset($_SESSION['user_id'])) {
     </table>
 </div>
 
-<div class="load_more">
+<div class="load_more" hidden="hidden">
     <a><span class="bottom"></span></a>
 </div>
 

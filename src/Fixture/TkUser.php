@@ -1,6 +1,6 @@
 <?php
 
-include_once 'FixtureService.php';
+require_once 'FixtureService.php';
 
 use src\Fixture\FixtureService\FixturesService;
 

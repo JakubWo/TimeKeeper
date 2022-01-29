@@ -47,6 +47,9 @@ class getWorkdayAction extends ApiController
             unset($workdays[$i]['user_id']);
         }
 
+        if (empty($workdays)) {
+            return self::errorResponse('Invalid workday parameter/s.', 403);
+        }
         return $workdays;
     }
 }

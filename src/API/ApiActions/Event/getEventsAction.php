@@ -18,8 +18,32 @@ class getEventsAction extends ApiController
             FILTER_VALIDATE_INT,
         );
 
-        if (empty($workdayId) || $dbService->getWorkdaysById([$workdayId])[0]['user_id'] != $userId) {
+        if (empty($workdayId)) {
             return self::errorResponse('Invalid workday_id parameter');
+        }
+
+        $targetUserId = $dbService->getWorkdaysById([$workdayId])[0]['user_id'];
+        if ($targetUserId != $userId) {
+            if ($_SESSION['user']['privileges'] === false) {
+                return self::errorResponse('Permission denied', 403);
+            }
+
+            $selectedUserTeam = $dbService->getTeamByMemberId($targetUserId)['team_name'];
+            $loggedUserTeamsPermissions = $dbService->getTeamsPermissions($userId);
+
+            $isFound = false;
+            foreach ($loggedUserTeamsPermissions as $teamsPermission) {
+                if ($teamsPermission['team_name'] === $selectedUserTeam) {
+                    if ($teamsPermission['permission'] === 'member') {
+                        return self::errorResponse('Permission denied.', 403);
+                    }
+                    $isFound = true;
+                }
+            }
+
+            if ($isFound === false) {
+                return self::errorResponse('Permission denied.', 403);
+            }
         }
 
         return self::reformatEvents($dbService->getWorkdayEvents($workdayId));

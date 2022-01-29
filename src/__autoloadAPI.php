@@ -1,11 +1,12 @@
 <?php
 
-include_once($GLOBALS['routingService']->getRoute('api-controller'));
-include_once($GLOBALS['routingService']->getRoute('api-loginAction'));
-include_once($GLOBALS['routingService']->getRoute('api-logoutAction'));
-include_once($GLOBALS['routingService']->getRoute('api-startAction'));
-include_once($GLOBALS['routingService']->getRoute('api-stopAction'));
-include_once($GLOBALS['routingService']->getRoute('api-breakAction'));
-include_once($GLOBALS['routingService']->getRoute('api-getWorkdaysAction'));
-include_once($GLOBALS['routingService']->getRoute('api-getWorkdayAction'));
-include_once($GLOBALS['routingService']->getRoute('api-getEventsAction'));
+require_once($GLOBALS['routingService']->getRoute('api-controller'));
+require_once($GLOBALS['routingService']->getRoute('api-loginAction'));
+require_once($GLOBALS['routingService']->getRoute('api-logoutAction'));
+require_once($GLOBALS['routingService']->getRoute('api-startAction'));
+require_once($GLOBALS['routingService']->getRoute('api-stopAction'));
+require_once($GLOBALS['routingService']->getRoute('api-breakAction'));
+require_once($GLOBALS['routingService']->getRoute('api-getWorkdaysAction'));
+require_once($GLOBALS['routingService']->getRoute('api-getWorkdayAction'));
+require_once($GLOBALS['routingService']->getRoute('api-getEventsAction'));
+require_once($GLOBALS['routingService']->getRoute('api-acceptWorkdayAction'));
